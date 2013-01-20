@@ -1,0 +1,23 @@
+<object name="portal_catalog">
+    <index name="corporateId" meta_type="FieldIndex">
+        <indexed_attr value="corporateId"/>
+    </index>
+    <index name="supplierId" meta_type="FieldIndex">
+        <indexed_attr value="customerId"/>
+    </index>
+    <index name="customerId" meta_type="FieldIndex">
+        <indexed_attr value="customerId"/>
+    </index>
+    <index name="storeId" meta_type="FieldIndex">
+        <indexed_attr value="storeId"/>
+    </index>
+    <index name="posId" meta_type="FieldIndex">
+        <indexed_attr value="posId"/>
+    </index>
+    
+    <column value="corporateId"/>
+    <column value="supplierId"/>
+    <column value="customerId"/>
+    <column value="storeId"/>
+    <column value="posId"/>
+</object>

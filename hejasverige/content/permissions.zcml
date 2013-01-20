@@ -1,0 +1,28 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="hejasverige.content">
+
+    <!-- Define new permissions -->
+    
+    <permission
+        id="hejasverige.AddMerchantFolder"
+        title="HejaSverige: Add Merchant Folder"
+        />
+
+    <permission
+        id="hejasverige.AddMerchant"
+        title="HejaSverige: Add Merchant"
+        />
+
+    <permission
+        id="hejasverige.AddStore"
+        title="HejaSverige: Add Store"
+        />
+
+    <permission
+        id="hejasverige.AddPos"
+        title="HejaSverige: Add Pos"
+        />
+  
+</configure>
