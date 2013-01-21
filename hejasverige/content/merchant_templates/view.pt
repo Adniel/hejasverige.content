@@ -22,6 +22,10 @@
             <label for="supplierId" i18n:translate="label_corporateId">Supplier Id:</label>
             <span id="supplierId" tal:content="context/supplierId" />
         </div>
+        <div>
+            <label for="discount" i18n:translate="label_discount">Discount:</label>
+            <span id="discount" tal:content="context/discount" />
+        </div>
 
         <tal:stores condition="view/haveStores">
             <h2 i18n:translate="title_merchant_subareas">Stores</h2>

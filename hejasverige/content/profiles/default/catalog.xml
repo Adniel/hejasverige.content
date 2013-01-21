@@ -8,6 +8,9 @@
     <index name="customerId" meta_type="FieldIndex">
         <indexed_attr value="customerId"/>
     </index>
+    <index name="discount" meta_type="FieldIndex">
+        <indexed_attr value="discount"/>
+    </index>
     <index name="storeId" meta_type="FieldIndex">
         <indexed_attr value="storeId"/>
     </index>
@@ -18,6 +21,7 @@
     <column value="corporateId"/>
     <column value="supplierId"/>
     <column value="customerId"/>
+    <column value="discount"/>
     <column value="storeId"/>
     <column value="posId"/>
 </object>

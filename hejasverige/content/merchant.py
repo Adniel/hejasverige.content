@@ -18,6 +18,19 @@ def corporateIdIsValid(value):
             raise Invalid(_(u'The corporateId must be 10 digits'))
     return True
 
+def discountIsValid(value):
+    """
+    """
+    if(value):
+        try:
+            value = float(value)
+            if value>100:
+                raise Invalid(_(u'Discount to large. Discount must be less than 100 and greater than 0.'))
+            if value<0:
+                raise Invalid(_(u'Discount to small. Discount must be less than 100 and greater than 0.'))
+        except:
+            raise Invalid(_(u'The discount must be numeric'))
+    return True
 
 class IMerchant(form.Schema):
 
@@ -27,9 +40,14 @@ class IMerchant(form.Schema):
     corporateId = schema.ASCIILine(title=_(u'Corporate Id'), description=_(u'The VAT number defining the merchant'),
                                    constraint=corporateIdIsValid)
 
-    customerId = schema.ASCIILine(title=_(u'Customer Id'), description=_(u'A number defining the merchant as a customer'))
+    customerId = schema.ASCIILine(title=_(u'Customer Id'), description=_(u'A number defining the merchant as a customer'),
+                                  required=False,)
 
-    supplierId = schema.ASCIILine(title=_(u'Supplier Id'), description=_(u'A number defining the merchant as a supplier'))
+    supplierId = schema.ASCIILine(title=_(u'Supplier Id'), description=_(u'A number defining the merchant as a supplier'),
+                                  required=False,)
+
+    discount = schema.ASCIILine(title=_(u'Discount'), description=_(u'The merchants agreed discount for Heja Sverige members'),
+                                required=False, constraint=discountIsValid)
 
 class View(grok.View):
 

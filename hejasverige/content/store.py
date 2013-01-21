@@ -13,7 +13,7 @@ from hejasverige.content.pos import IPos
 class IStore(form.Schema):
 
     """A Store
-...."""
+    """
 
     storeId = schema.ASCIILine(title=_(u'Store Id'),
                                description=_(u'The id defining the store'))
@@ -46,5 +46,5 @@ class View(grok.View):
                    'path': dict(query='/'.join(self.context.getPhysicalPath()),
                    depth=1), 'sort_on': 'sortable_title'})]
 
-        print poslist
+        #print poslist
         return poslist

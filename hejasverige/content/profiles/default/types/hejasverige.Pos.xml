@@ -6,7 +6,7 @@
     <!-- Basic properties -->
     <property name="title" i18n:translate="">POS</property>
     <property name="description" i18n:translate="">A description of a POS</property>
-    <property name="content_icon">++resource++hejasverige.content/pos_icon.gif</property>
+    <property name="content_icon">++resource++hejasverige.content/pos_icon.png</property>
     <property name="allow_discussion">False</property>
     
     <!-- Hierarchy control -->
