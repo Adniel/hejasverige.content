@@ -1,6 +1,17 @@
 <object name="portal_types">
+	<!--
+				copy and customize the template 
+				then add it to portal types -> Plone Site -> available views 
+				then select it from the display menu		
+	-->
 	<object name="hejasverige.MerchantFolder" meta_type="Dexterity FTI" />
 	<object name="hejasverige.Merchant" 	  meta_type="Dexterity FTI" />
 	<object name="hejasverige.Store" 	  	  meta_type="Dexterity FTI" />
 	<object name="hejasverige.Pos" 	          meta_type="Dexterity FTI" />
+
+	<object name="hejasverige.DistrictFolder" meta_type="Dexterity FTI" />
+	<object name="hejasverige.District" 	  meta_type="Dexterity FTI" />
+	<object name="hejasverige.Council" 	      meta_type="Dexterity FTI" />
+	<object name="hejasverige.Club" 	      meta_type="Dexterity FTI" />
+
 </object>

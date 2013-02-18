@@ -30,5 +30,28 @@
         <role name="Owner" />
         <role name="Contributor" />
     </permission>
+
+    <permission name="HejaSverige: Add District Folder" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+    </permission>
+    <permission name="HejaSverige: Add District" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+        <role name="Owner" />
+        <role name="Contributor" />
+    </permission>
+    <permission name="HejaSverige: Add Council" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+        <role name="Owner" />
+        <role name="Contributor" />
+    </permission>
+    <permission name="HejaSverige: Add Club" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+        <role name="Owner" />
+        <role name="Contributor" />
+    </permission>
   </permissions>
 </rolemap>

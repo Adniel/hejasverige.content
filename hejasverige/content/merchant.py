@@ -46,7 +46,7 @@ class IMerchant(form.Schema):
     supplierId = schema.ASCIILine(title=_(u'Supplier Id'), description=_(u'A number defining the merchant as a supplier'),
                                   required=False,)
 
-    discount = schema.ASCIILine(title=_(u'Discount'), description=_(u'The merchants agreed discount for Heja Sverige members'),
+    discount = schema.ASCIILine(title=_(u'Discount'), description=_(u'The merchant´s agreed discount for Heja Sverige members'),
                                 required=False, constraint=discountIsValid)
 
 class View(grok.View):

@@ -15,7 +15,6 @@
   <!-- Include files -->
   <include file="permissions.zcml" />
 
-
   <grok:grok package="." />
 
   <genericsetup:registerProfile
