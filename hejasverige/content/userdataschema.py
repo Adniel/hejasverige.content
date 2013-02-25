@@ -58,6 +58,13 @@ class IEnhancedUserDataSchema(IUserDataSchema):
         constraint=validatePersonalId,
         )
 
+    kollkoll = schema.Bool(
+        title=_(u'label_kollkoll', default=u'Registered with Kollkoll'),
+        description=_(u'help_accept',
+                      default=u"Tick this box to indicate that you have an account registered with kollkoll. "),
+        required=False,
+        )
+
     accept = schema.Bool(
         title=_(u'label_accept', default=u'Accept terms of use'),
         description=_(u'help_accept',

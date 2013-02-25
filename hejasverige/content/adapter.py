@@ -18,6 +18,14 @@ class EnhancedUserDataPanelAdapter(UserDataPanelAdapter):
 
     personal_id = property(get_personal_id, set_personal_id)
 
+    def get_kollkoll(self):
+        return self._getProperty('kollkoll')
+
+    def set_kollkoll(self, value):
+        return self.context.setMemberProperties({'kollkoll': value})
+
+    kollkoll = property(get_kollkoll, set_kollkoll)
+
     def get_accept(self):
         return self._getProperty('accept')
 
@@ -25,3 +33,4 @@ class EnhancedUserDataPanelAdapter(UserDataPanelAdapter):
         return self.context.setMemberProperties({'accept': value})
 
     accept = property(get_accept, set_accept)
+
