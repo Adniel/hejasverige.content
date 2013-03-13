@@ -14,4 +14,8 @@
 	<object name="hejasverige.Council" 	      meta_type="Dexterity FTI" />
 	<object name="hejasverige.Club" 	      meta_type="Dexterity FTI" />
 
+	<object name="hejasverige.InvoiceFolder"  meta_type="Dexterity FTI" />
+	<object name="hejasverige.Invoice" 	      meta_type="Dexterity FTI" />
+
+	<object name="hejasverige.Member" 	      meta_type="Dexterity FTI" />
 </object>

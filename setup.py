@@ -27,6 +27,7 @@ setup(name='hejasverige.content',
           'setuptools',
           'Products.CMFPlone',
           'plone.app.dexterity [grok]',
+          'dexterity.membrane',
           'plone.app.referenceablebehavior',
           'plone.app.relationfield',
           'plone.namedfile [blobs]'

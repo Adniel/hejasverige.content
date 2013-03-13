@@ -3,7 +3,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="hejasverige.content">
 
-    <!-- Define new permissions -->
+    <!-- Merchant permissions -->
     
     <permission
         id="hejasverige.AddMerchantFolder"
@@ -25,6 +25,8 @@
         title="HejaSverige: Add Pos"
         />
 
+    <!-- Sport permissions -->
+
     <permission
         id="hejasverige.AddDistrictFolder"
         title="HejaSverige: Add District Folder"
@@ -43,6 +45,17 @@
     <permission
         id="hejasverige.AddClub"
         title="HejaSverige: Add Club"
+        />
+
+    <!-- Invoice permissions -->
+    <permission
+        id="hejasverige.AddInvoiceFolder"
+        title="HejaSverige: Add Invoice Folder"
+        />
+
+    <permission
+        id="hejasverige.AddInvoice"
+        title="HejaSverige: Add Invoice"
         />
 
 </configure>
