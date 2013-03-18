@@ -6,6 +6,7 @@
  <permission>View</permission>
  <state state_id="created" title="Created">
   <description>The invoice is created</description>
+  <exit-transition transition_id="fail"/>
   <exit-transition transition_id="transfer"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Contributor</permission-role>
@@ -24,6 +25,36 @@
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>HejaSverigeAPIMember</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>HejaSverigeAPIMember</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="failed" title="Failed">
+  <exit-transition transition_id="retract"/>
+  <exit-transition transition_id="transfer"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>HejaSverigeAPIMember</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Change portal events" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -65,6 +96,12 @@
    <permission-role>Reader</permission-role>
   </permission-map>
  </state>
+ <transition transition_id="fail" title="Fails item" new_state="failed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=fail" category="workflow" icon="">Fail</action>
+  <guard>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+ </transition>
  <transition transition_id="retract" title="Retracts item" new_state="created" trigger="USER" before_script="" after_script="">
   <description>If you transfered the item by mistake or want to perform additional edits, this will take it back.</description>
   <action url="%(content_url)s/content_status_modify?workflow_action=retract" category="workflow" icon="">Retract</action>
