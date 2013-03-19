@@ -8,7 +8,7 @@ from plone.directives import form
 from Products.CMFCore.utils import getToolByName
 from plone.memoize.instance import memoize
 from plone.namedfile.field import NamedBlobFile
-
+from plone.indexer import indexer
 
 
 class IInvoiceFolder(form.Schema):
@@ -138,6 +138,29 @@ class IInvoice(form.Schema):
                            required=False)
 
 
+# create index value here somewhere from externalId
+#@grok.adapter(IInvoice, name='externalId')
+#@indexer(IInvoice)
+#def invoiceExternalIdIndexer(context):
+#    return context.externalId
+
+@grok.adapter(IInvoice, name='start')
+@indexer(IInvoice)
+def invoiceStartIndexer(context):
+    """Create a catalogue indexer, registered as an adapter, which can
+    populate the ``start`` index with the invoice's date.
+    """
+    print "Indexing start date for an invoice. J!"
+    return context.invoiceDate
+
+@grok.adapter(IInvoice, name='end')
+@indexer(IInvoice)
+def invoiceEndIndexer(context):
+    """Create a catalogue indexer, registered as an adapter, which can
+    populate the ``end`` index with the invoice's due date.
+    """
+    print "Indexing end date for an invoice. J!"
+    return context.invoiceExpireDate
 
 class InvoiceView(grok.View):
 

@@ -17,6 +17,10 @@
     <index name="posId" meta_type="FieldIndex">
         <indexed_attr value="posId"/>
     </index>
+
+    <index name="externalId" meta_type="FieldIndex">
+        <indexed_attr value="externalId"/>
+    </index>
     
     <column value="corporateId"/>
     <column value="supplierId"/>
@@ -24,4 +28,5 @@
     <column value="discount"/>
     <column value="storeId"/>
     <column value="posId"/>
+    <column value="externalId"/>
 </object>
