@@ -17,5 +17,7 @@
 	<object name="hejasverige.InvoiceFolder"  meta_type="Dexterity FTI" />
 	<object name="hejasverige.Invoice" 	      meta_type="Dexterity FTI" />
 
-	<object name="hejasverige.Member" 	      meta_type="Dexterity FTI" />
+	<object name="hejasverige.person"		  meta_type="Dexterity FTI" />
+	<object name="hejasverige.relation"		  meta_type="Dexterity FTI" />
+	<object name="hejasverige.relationfolder" meta_type="Dexterity FTI" />
 </object>

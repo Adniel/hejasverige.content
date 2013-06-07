@@ -1,0 +1,67 @@
+<dl class="portlet portletProfile"
+    i18n:domain="hejasverige.content">
+    <section>
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        Min profil
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <script type="text/javascript">
+    $(function(){
+      $('a#clubinfo').prepOverlay({
+        subtype: 'ajax',
+        filter: '#content>*'
+      });
+    });        
+    </script>     
+    <!--PROFIL-->
+    <section>
+        <!--PROFILBILD/NAMN-->
+        <section tal:define="info view/myinfo" id="profil" class="profil block" >
+            <figure style="margin-bottom:10px;">
+                <figcaption>
+                    <span tal:replace="info/name">Default text</span>
+                </figcaption>
+                <img tal:define="width python:64" tal:attributes="src info/portrait/absolute_url;width width" alt="Profilbild" />
+            </figure>
+            
+            <!--SALDO-->
+            <section tal:condition="view/megabankisinstalled" id="saldo">
+                <h3 class="orange dashed">Saldo:</h3>
+                <ul>
+                    <li class="gra">Nuvarande saldo<span class="right" tal:content="info/balance">589:-</span></li>
+                </ul>
+                <span class="right">Väntande återbäring: <span tal:replace="info/amount_pending"/></span>
+            </section>
+            
+            <!--ANHÖRIGA-->
+            <section class="anhoriga">
+                <h3 class="orange">Anh&ouml;riga:</h3>
+                <tal:relatives tal:repeat="relative view/myfamily">
+                    <figure class="anhorig">
+
+                        <img tal:define="scales relative/person/@@images;
+                                         thumbnail python: scales.scale('avatar', width=32, height=32);"
+                            tal:condition="thumbnail"
+                            tal:attributes="src thumbnail/url;
+                                            width thumbnail/width;
+                                            height thumbnail/height" />
+
+                        <!--img tal:define="width python:32" tal:attributes="src relative/portrait;alt relative/name;width width" /-->
+                        <figcaption>
+                            <span tal:replace="relative/name"/><br />
+                            <tal:clubs tal:repeat="club relative/clubs">
+                                <a href="#" tal:attributes="href club/absolute_url" id="clubinfo"><span tal:replace="club/title"/></a>
+                            </tal:clubs>
+                        </figcaption>
+                    </figure>
+                </tal:relatives>
+            </section>
+        </section>
+    </section>
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+</dl>

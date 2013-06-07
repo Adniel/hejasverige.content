@@ -53,5 +53,23 @@
         <role name="Owner" />
         <role name="Contributor" />
     </permission>
+    <permission name="HejaSverige: Add Person" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+        <role name="Owner" />
+        <role name="Contributor" />
+    </permission>
+    <permission name="HejaSverige: Add Relation" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+        <role name="Owner" />
+        <role name="Contributor" />
+    </permission>
+    <permission name="HejaSverige: Add Relation Folder" acquire="False">
+        <role name="Manager" />
+        <role name="Site Administrator" />
+        <role name="Owner" />
+        <role name="Contributor" />
+    </permission>
   </permissions>
 </rolemap>

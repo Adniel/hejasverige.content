@@ -4,6 +4,8 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="hejasverige.content">
 
@@ -14,8 +16,9 @@
   
   <!-- Include files -->
   <include file="permissions.zcml" />
-  <include package=".member" />
 
+  <!-- Include the sub-packages that use their own configure.zcml files. -->
+  <include package=".portlets" />
   <grok:grok package="." />
 
   <genericsetup:registerProfile
@@ -25,7 +28,24 @@
       description="Installs the content types for Heja Sverige"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+
   <!-- -*- extra stuff goes here -*- -->
+  <!-- Mark personal preferences pages as IMyPages views-->
+  <class class="plone.app.users.browser.personalpreferences.PersonalPreferencesPanel">
+     <implements interface=".interfaces.IMyPages" />
+  </class>
+
+  <class class="plone.app.users.browser.personalpreferences.PasswordAccountPanel">
+     <implements interface=".interfaces.IMyPages" />
+  </class>
+
+  <class class="plone.app.users.browser.personalpreferences.UserDataPanel">
+     <implements interface=".interfaces.IMyPages" />
+  </class>
+
+ <browser:resourceDirectory
+    name="hejasverige.content"
+    directory="static" />
 
   <browser:page
       for="Products.CMFPlone.Portal.PloneSite"
@@ -33,5 +53,39 @@
       class=".personalpreferencesoverride.CustomizedUserDataPanel"
       permission="cmf.SetOwnProperties"
       />
+
+  <plone:behavior
+      title="Name from full name"
+      description="Use the full name as name (and id)"
+      provides=".person.INameFromFullName"
+      factory=".person.NameFromFullName"
+      for=".person.IPerson"
+      />
+
+  <adapter name="Title" factory=".person.Title" />
+
+  <include package="collective.monkeypatcher" />
+
+  <monkey:patch
+      description="This works around problems with handling the forward index unicode from the external club import"
+      class="Products.PluginIndexes.common.UnIndex.UnIndex"
+      original="removeForwardIndexEntry"
+      replacement=".patches.patchedRemoveForwardIndexEntry"
+      />
+  <monkey:patch
+      description="This works around problems with handling the forward index unicode from the external club import"
+      class="Products.PluginIndexes.common.UnIndex.UnIndex"
+      original="insertForwardIndexEntry"
+      replacement=".patches.patchedInsertForwardIndexEntry"
+      />
+
+  <monkey:patch
+      description="This works around problems with unicode strings in actions.xml"
+      class="Products.CMFCore.ActionInformation.Action"
+      original="getInfoData"
+      replacement=".patches.patchedGetInfoData"
+      />
+
+
 
 </configure>

@@ -1,0 +1,135 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="hejasverige.content">
+<body>
+
+<metal:main fill-slot="main">
+    <metal:main define-macro="main"
+       tal:define="b_size   python:10;
+                       b_orphan python:1;
+                       b_start  request/b_start | python:0;
+                       content  python:view.clubs(start=b_start, size=b_size+b_orphan);
+                       currentSelectedSport view/selectedSport;
+                       currentSelectedDistrict view/selectedDistrict;
+                       currentSelectedCouncil view/selectedCouncil;"
+                       >
+
+        <h1 class="documentFirstHeading"
+            i18n:translate="header_add_relation">
+          Lägg till förening
+        </h1>
+        <script type="text/javascript">
+        $(function() {
+            $('#district').change(function() {
+                this.form.submit();
+            });
+        });
+        $(function() {
+            $('#council').change(function() {
+                this.form.submit();
+            });
+        });
+        $(function() {
+            $('#sport').change(function() {
+                this.form.submit();
+            });
+        });
+        $(function(){
+          $('a#clubinfo').prepOverlay({
+            subtype: 'ajax',
+            filter: '#content>*'
+          });
+        });        
+        </script>   
+        <form method="post" tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+            
+            <span tal:replace="structure context/@@authenticator/authenticator" />
+            
+            <fieldset>
+                <legend i18n:translate="fieldset_legend_search">Filter</legend>
+              <label for="district">Distrikt:</label>
+              <select id="district" name="district">
+                <option>(Alla distrikt)</option>
+                <option
+                    tal:repeat="district view/districts"
+                    tal:attributes="value district/value;
+                    selected python:currentSelectedDistrict == district['value'] and 'selected' or None"
+                    tal:content="district/name"
+                    />
+              </select>
+
+              <label for="council">Kommun:</label>
+              <select id="council" name="council">
+                <option>(Alla kommuner)</option>
+                <option
+                    tal:repeat="council view/councils"
+                    tal:attributes="value council/value;
+                    selected python:currentSelectedCouncil == council['value'] and 'selected' or None"
+                    tal:content="council/name"
+                    />
+              </select>
+
+              <label for="sport">Idrott:</label>
+              <select id="sport" name="sport">
+                <option>(Alla idrotter)</option>
+                <option
+                    tal:repeat="sport view/sports"
+                    tal:attributes="value sport/value;
+                    selected python:currentSelectedSport == sport['value'] and 'selected' or None"
+                    tal:content="sport/name"
+                    />
+              </select>
+
+              <input type="submit" class="context" name="form.button.Search"
+                  value="Sök"
+                  i18n:attributes="value" />
+            </fieldset>
+        </form>
+
+        <p tal:condition="not:content" i18n:translate="description_no_content_found">
+            Det finns inga föreningar
+        </p>
+        
+        <tal:block condition="content"
+                   define="Batch python:modules['Products.CMFPlone'].Batch;
+                           batch python:Batch(content, b_size, int(b_start), orphan=int(b_orphan));">
+        
+            <table class="listing">
+                <thead>
+                    <tr>
+                        <th i18n:translate="column_label_name">Namn</th>
+                        <th i18n:translate="column_label_sport">Sport</th>
+                        <th/>
+                        <th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr tal:repeat="item batch">
+                      <td>
+                          <a id="clubinfo" tal:attributes="href item/url"
+                              tal:content="item/title" />
+
+                      </td>
+                      <td tal:content="item/sport" />
+                      <td>
+                        <a title="Välj detta alternativ om du vill bidra till föreningen när du handlar" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=support">Supportera</a>
+                      </td>
+                      <td>
+                        <a title="Välj detta alternativ om du vill bli medlem i föreningen" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=member">Bli medlem</a>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <div metal:use-macro="context/batch_macros/macros/navigation" />
+        
+        </tal:block>
+    </metal:main>
+</metal:main>
+
+</body>
+</html>

@@ -3,6 +3,7 @@
 from five import grok
 from zope import schema
 from hejasverige.content import _
+from hejasverige.member.member import IMember
 from zope.interface import Invalid
 from plone.directives import form
 from plone.memoize.instance import memoize
@@ -11,6 +12,9 @@ from plone.app.textfield import RichText
 
 from plone.namedfile.interfaces import IImageScaleTraversable
 from plone.namedfile.field import NamedBlobImage
+from z3c.relationfield.schema import RelationList, RelationChoice
+from plone.formwidget.contenttree import ObjPathSourceBinder
+from zope.interface import alsoProvides
 
 grok.templatedir('templates')
 
@@ -157,7 +161,7 @@ class CouncilView(grok.View):
         """
         catalog = getToolByName(self.context, 'portal_catalog')
 
-        return [dict(url=club.getURL(), title=club.Title,
+        return [dict(url=club.getURL(), title=club.Title, sport=club.Sport,
                 address=club.Description) for club in
                 catalog({'object_provides': IClub.__identifier__,
                 'path': dict(query='/'.join(self.context.getPhysicalPath()),
@@ -195,7 +199,7 @@ class IClub(form.Schema, IImageScaleTraversable):
 
     #
     Badge = NamedBlobImage(title=_(u'Emblem'),
-                           description=_(u'An image used as badge for the specified club'
+                           description=_(u'Upload an image used as badge for the specified club'
                            ), required=False)
 
     Founded = schema.TextLine(title=_(u'Grundad'),
@@ -236,6 +240,30 @@ class IClub(form.Schema, IImageScaleTraversable):
     Presentation = RichText(title=_(u'Presentation'), description=_(u''),
                             required=False)
 
+    form.fieldset('members',
+            label=u"Medlemmar",
+            fields=['ordinaryMembers', 'economyMembers']
+        )
+
+    # Use invariant to make sure members only exists in one group, or make them not appear in members
+    # group if they are in economy
+    ordinaryMembers = RelationList(
+        title=u"Medlemmar",
+        default=[],
+        value_type=RelationChoice(title=_(u"Medlemmar"),
+                                  source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
+        required=False,
+    )
+
+    economyMembers = RelationList(
+        title=u"Ekonomiansvariga",
+        default=[],
+        value_type=RelationChoice(title=_(u"Ekonomiansvariga"),
+                                  source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
+        required=False,
+    )
+
+
 
 class ClubView(grok.View):
 
@@ -246,7 +274,7 @@ class ClubView(grok.View):
 
     grok.context(IClub)
     grok.require('zope2.View')
-    grok.name('view')
+    grok.name('view2')
     grok.template('club')
 
     def update(self):

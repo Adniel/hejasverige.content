@@ -58,4 +58,20 @@
         title="HejaSverige: Add Invoice"
         />
 
+    <!-- Person permissions -->
+    <permission
+        id="hejasverige.AddPerson"
+        title="HejaSverige: Add Person"
+        />
+
+    <permission
+        id="hejasverige.AddRelation"
+        title="HejaSverige: Add Relation"
+        />
+
+    <permission
+        id="hejasverige.AddRelationFolder"
+        title="HejaSverige: Add Relation Folder"
+        />
+
 </configure>

@@ -4,30 +4,32 @@
     i18n:domain="hejasverige.content">
     
     <!-- Basic properties -->
-    <property name="title" i18n:translate="">Store</property>
-    <property name="description" i18n:translate="">A description of a store</property>
-    <property name="content_icon">++resource++hejasverige.content/store_icon.gif</property>
+    <property name="title" i18n:translate="">Person</property>
+    <property name="description" i18n:translate="">A person</property>
+    <property name="content_icon">++resource++hejasverige.content/person.png</property>
     <property name="allow_discussion">False</property>
     
     <!-- Hierarchy control -->
-    <property name="global_allow">False</property>
+    <property name="global_allow">True</property>
     <property name="filter_content_types">True</property>
     <property name="allowed_content_types">
-        <element value="Document" />
-        <element value="Image" />
-        <element value="hejasverige.Pos" />
+        <element value="hejasverige.relation" />
     </property>
     
     <!-- Schema, class and security -->
-    <property name="schema">hejasverige.content.store.IStore</property> 
+    <property name="schema">hejasverige.content.person.IPerson</property> 
     <property name="klass">plone.dexterity.content.Container</property>
-    <property name="add_permission">hejasverige.AddStore</property>
+    <property name="add_permission">hejasverige.AddPerson</property>
  
     <!-- enabled behaviors -->
     <property name="behaviors">
-        <element value="plone.app.content.interfaces.INameFromTitle" />
+         <element value="plone.app.dexterity.behaviors.metadata.ICategorization" />
+         <element value="plone.app.dexterity.behaviors.metadata.IPublication" />
+         <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
+        <!--element value="plone.app.dexterity.behaviors.metadata.IDublinCore" /-->
+        <!--element value="plone.app.content.interfaces.INameFromTitle" /-->
+        <element value="hejasverige.content.person.INameFromFullName" />
         <element value="plone.app.referenceablebehavior.referenceable.IReferenceable" />
-        <element value="plone.app.dexterity.behaviors.metadata.IDublinCore" />
     </property>
     
     <!-- Views and aliases -->
@@ -40,7 +42,7 @@
     <alias from="(Default)" to="(selected layout)"/>
     <alias from="edit" to="@@edit"/>
     <alias from="sharing" to="@@sharing"/>
-    <alias from="view" to="@@view"/>
+    <alias from="view" to="@@my-person"/>
 
     <action title="View" action_id="view" category="object" condition_expr=""
         url_expr="string:${folder_url}/" visible="True">

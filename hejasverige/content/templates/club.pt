@@ -9,6 +9,13 @@
 
 <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core">
+        <div tal:define="picture nocall:context/badge"
+             tal:condition="nocall:badge">
+            <img tal:attributes="src string:${context/absolute_url}/@@download/badge/${badge/filename};
+                                 height badge/_height | nothing;
+                                 width badge/_width | nothing;"
+                />
+        </div>      
         <div>
             <label for="clubId" i18n:translate="label_clubId">ClubId:</label>
             <span id="clubId" tal:content="context/clubId" />

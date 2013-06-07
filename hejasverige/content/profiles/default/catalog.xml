@@ -21,6 +21,10 @@
     <index name="externalId" meta_type="FieldIndex">
         <indexed_attr value="externalId"/>
     </index>
+
+    <index name="personal_id" meta_type="FieldIndex">
+        <indexed_attr value="personal_id"/>
+    </index>
     
     <column value="corporateId"/>
     <column value="supplierId"/>
@@ -29,4 +33,6 @@
     <column value="storeId"/>
     <column value="posId"/>
     <column value="externalId"/>
+    <column value="Sport"/>
+    <column value="personal_id"/>
 </object>
