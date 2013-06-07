@@ -8,7 +8,7 @@ from zope import schema
 from zope.interface import Invalid, invariant, alsoProvides
 from five import grok
 from hejasverige.content import _
-from dexterity.membrane.membrane_helpers import validate_unique_email
+from AccessControl import Unauthorized
 from zope.schema import ValidationError
 from zope.interface import Interface
 from plone.memoize.instance import memoize
@@ -27,6 +27,67 @@ class ToShortPersonalId(ValidationError):
 class IllegalCheckDigit(ValidationError):
     "Ogiltig checksiffra"
 
+def get_brains_for_email(context, email, request=None):
+    """Anonymous users should be able to look for email addresses.
+    Otherwise they cannot log in.
+
+    This searches in the membrane_tool and returns brains with this
+    email address.  Hopefully the result is one or zero matches.
+
+    Note that we search for exact_getUserName as the email address is
+    supposed to be used a login name (user name).  TODO: We may want
+    to change the name of this function to reflect this.
+    """
+    try:
+        email = email.strip()
+    except (ValueError, AttributeError):
+        return []
+    if email == '' or '@' not in email:
+        return []
+
+    catalog = getToolByName(context, "portal_catalog", None)
+
+    kw = dict(exact_getUserName=email)
+    #args = CatalogSearchArgumentsMap(request, kw)
+    #users = user_catalog.search(args)
+    users = catalog.unrestrictedSearchResults(**kw)
+    return users
+
+
+def validate_unique_email(email, context=None):
+    """Validate this email as unique in the site.
+    """
+    if context is None:
+        context = getSite()
+    matches = get_brains_for_email(context, email)
+    if not matches:
+        # This email is not used yet.  Fine.
+        return
+    if len(matches) > 1:
+        msg = "Multiple matches on email %s" % email
+        logger.warn(msg)
+        return msg
+    # Might be this member, being edited.  That should have been
+    # caught by our new invariant though, at least when changing the
+    # email address through the edit interface instead of a
+    # personalize_form.
+    match = matches[0]
+    try:
+        found = match.getObject()
+    except (AttributeError, KeyError, Unauthorized):
+        # This is suspicious.  Best not to use this one.
+        pass
+    else:
+        if found == context:
+            # We are the only match.  Good.
+            logger.debug("Only this object itself has email %s", email)
+            return
+
+    # There is a match but it is not this member or we cannot get
+    # the object.
+    msg = "Email %s is already in use." % email
+    logger.debug(msg)
+    return msg
 
 def personal_id_check_digit(p):
     a,p=[0,2,4,6,8,1,3,5,7,9],[int(i) for i in p]
