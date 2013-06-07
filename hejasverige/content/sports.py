@@ -3,7 +3,7 @@
 from five import grok
 from zope import schema
 from hejasverige.content import _
-from hejasverige.member.member import IMember
+#from hejasverige.member.member import IMember
 from zope.interface import Invalid
 from plone.directives import form
 from plone.memoize.instance import memoize
@@ -247,21 +247,21 @@ class IClub(form.Schema, IImageScaleTraversable):
 
     # Use invariant to make sure members only exists in one group, or make them not appear in members
     # group if they are in economy
-    ordinaryMembers = RelationList(
-        title=u"Medlemmar",
-        default=[],
-        value_type=RelationChoice(title=_(u"Medlemmar"),
-                                  source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
-        required=False,
-    )
+    #ordinaryMembers = RelationList(
+    #    title=u"Medlemmar",
+    #    default=[],
+    #    value_type=RelationChoice(title=_(u"Medlemmar"),
+    #                              source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
+    #    required=False,
+    #)
 
-    economyMembers = RelationList(
-        title=u"Ekonomiansvariga",
-        default=[],
-        value_type=RelationChoice(title=_(u"Ekonomiansvariga"),
-                                  source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
-        required=False,
-    )
+    #economyMembers = RelationList(
+    #    title=u"Ekonomiansvariga",
+    #    default=[],
+    #    value_type=RelationChoice(title=_(u"Ekonomiansvariga"),
+    #                              source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
+    #    required=False,
+    #)
 
 
 
