@@ -7,7 +7,7 @@ from plone.directives import form
 from zope import schema
 from zope.interface import Invalid, invariant, alsoProvides
 from five import grok
-from hejasverige.member import _
+from hejasverige.content import _
 from dexterity.membrane.membrane_helpers import validate_unique_email
 from zope.schema import ValidationError
 from zope.interface import Interface
