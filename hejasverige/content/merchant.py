@@ -4,7 +4,7 @@ from five import grok
 from zope import schema
 from hejasverige.content import _
 from zope.interface import Invalid
-from plone.directives import form
+from plone.directives import form, dexterity
 from plone.memoize.instance import memoize
 from Products.CMFCore.utils import getToolByName
 from hejasverige.content.store import IStore
@@ -37,17 +37,29 @@ class IMerchant(form.Schema):
     """A Merchant
 	"""
 
-    corporateId = schema.ASCIILine(title=_(u'Corporate Id'), description=_(u'The VAT number defining the merchant'),
+    corporateId = schema.ASCIILine(title=_(u'Corporate Id'), 
+                                   description=_(u'The VAT number defining the merchant'),
                                    constraint=corporateIdIsValid)
 
-    customerId = schema.ASCIILine(title=_(u'Customer Id'), description=_(u'A number defining the merchant as a customer'),
+    customerId = schema.ASCIILine(title=_(u'Customer Id'), 
+                                  description=_(u'A number defining the merchant as a customer'),
                                   required=False,)
 
-    supplierId = schema.ASCIILine(title=_(u'Supplier Id'), description=_(u'A number defining the merchant as a supplier'),
+    supplierId = schema.ASCIILine(title=_(u'Supplier Id'), 
+                                  description=_(u'A number defining the merchant as a supplier'),
                                   required=False,)
 
-    discount = schema.ASCIILine(title=_(u'Discount'), description=_(u'The merchant´s agreed discount for Heja Sverige members'),
-                                required=False, constraint=discountIsValid)
+    discount = schema.ASCIILine(title=_(u'Discount'), 
+                                description=_(u'The merchant´s agreed discount for Heja Sverige members'),
+                                required=False,
+                                constraint=discountIsValid)
+
+    dexterity.read_permission(transaction_description='cmf.AddPortalContent') 
+    dexterity.write_permission(transaction_description='cmf.ManagePortal') 
+    transaction_description = schema.List(value_type=schema.TextLine(),
+                                          title=_(u'Transaction Description'), 
+                                          description=_(u'Regular expressions used to evaulate transaction descriptions from external systems. One expression per line.'),
+                                          required=False)
 
 class View(grok.View):
 

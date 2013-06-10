@@ -35,4 +35,5 @@
     <column value="externalId"/>
     <column value="Sport"/>
     <column value="personal_id"/>
+    <column value="transaction_description"/>
 </object>
