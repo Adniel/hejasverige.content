@@ -255,6 +255,7 @@ class IClub(form.Schema, IImageScaleTraversable):
         required=False,
     )
 
+    # tactical comment
     economyMembers = RelationList(
         title=u"Ekonomiansvariga",
         default=[],
