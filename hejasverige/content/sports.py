@@ -3,7 +3,9 @@
 from five import grok
 from zope import schema
 from hejasverige.content import _
-from hejasverige.member.member import IMember
+#from hejasverige.member.member import IMember
+from hejasverige.content.interfaces import IMyPages
+
 from zope.interface import Invalid
 from plone.directives import form
 from plone.memoize.instance import memoize
@@ -251,7 +253,7 @@ class IClub(form.Schema, IImageScaleTraversable):
         title=u"Medlemmar",
         default=[],
         value_type=RelationChoice(title=_(u"Medlemmar"),
-                                  source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
+                                  source=ObjPathSourceBinder(object_provides=IMyPages.__identifier__)),
         required=False,
     )
 
@@ -260,7 +262,7 @@ class IClub(form.Schema, IImageScaleTraversable):
         title=u"Ekonomiansvariga",
         default=[],
         value_type=RelationChoice(title=_(u"Ekonomiansvariga"),
-                                  source=ObjPathSourceBinder(object_provides=IMember.__identifier__)),
+                                  source=ObjPathSourceBinder(object_provides=IMyPages.__identifier__)),
         required=False,
     )
 
