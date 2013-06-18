@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="se"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
@@ -13,78 +13,73 @@
                        b_orphan python:1;
                        b_start  request/b_start | python:0;
                        content  python:view.persons(start=b_start, size=b_size+b_orphan);">
-        
+
         <h1 class="documentFirstHeading"
             i18n:translate="header_my_family">
-          Min familj
+          Anhöriga
         </h1>
         
         <p class="documentDescription" i18n:translate="description_my_family">
             Registrerade personer i min familj
         </p>
-        
-        <form method="get" tal:attributes="action string:${context/absolute_url}/${view/__name__}">
-            
-            <span tal:replace="structure context/@@authenticator/authenticator" />
-            
-            <fieldset>
-                <legend i18n:translate="fieldset_legend_search">Search parameters</legend>
-            
-                    <div i18n:translate="dam_report_code">
-                        Select a code
-                
-                        <select name="code" size="1">
-                            <option value="">Please select</option>
-                            <option
-                                tal:repeat="code view/codes"
-                                tal:attributes="value code;
-                                                selected python:currentSelection == code and 'selected' or None"
-                                tal:content="code"
-                                />
-                        </select>
-                
-                        <input type="submit" class="context" name="form.button.Search"
-                            value="Search"
-                            i18n:name="submit_button"
-                            i18n:attributes="value" />
-                    </div>
-            </fieldset>
-        </form>
-        
-        <h2 i18n:translate="heading_persons">Personer</h2>
+
+        <script type="text/javascript">
+        $(function($){
+          $('a#add-person').prepOverlay({
+            subtype: 'ajax',
+            filter: '#content>*',
+            formselector: 'form',
+            closeselector: 'INPUT#form-buttons-cancel',
+            noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
+            redirect: function () {return location.href;},    
+            width:'50%'
+
+          });
+        });
+        </script>
+
+        <a id="add-person" class="button" tal:attributes="href string:${context/absolute_url}/++add++hejasverige.person">Lägg till person</a>
+
+        <!--h2 i18n:translate="heading_persons">Personer</h2-->
         
         <p tal:condition="not:content" i18n:translate="description_no_content_found">
-            No content found
+            Inga personer finns ännu registrerade
         </p>
         
         <tal:block condition="content"
                    define="Batch python:modules['Products.CMFPlone'].Batch;
                            batch python:Batch(content, b_size, int(b_start), orphan=int(b_orphan));">
         
-            
-            <table class="listing">
-                <thead>
-                    <tr>
-                        <th i18n:translate="column_label_name">Namn</th>
-                        <th i18n:translate="column_label_personal_id">Personnummer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr tal:repeat="item batch">
-                        <td>
+                    <div tal:repeat="relative batch">
+						<figure class="familj">
+	                        <img tal:define="scales relative/person/@@images;
+	                                         thumbnail python: scales.scale('avatar', width=128, height=128);"
+	                            tal:condition="thumbnail"
+	                            tal:attributes="src thumbnail/url;
+	                                            width thumbnail/width;
+	                                            height thumbnail/height" />
+
+	                        <figcaption>
+	                            <a tal:attributes="href string:${relative/person/absolute_url}/my-person" href="#"><span tal:replace="relative/name"/></a><br />
+	                            <span tal:replace="relative/person/personal_id"/><br />
+	                            <tal:clubs tal:repeat="club relative/clubs">
+	                                <a href="#" tal:attributes="href club/absolute_url" id="clubinfo"><span tal:replace="club/title"/></a>
+	                            </tal:clubs>
+	                        </figcaption>
+	                 		
+            			</figure>
+
+                        <!--td>
                             <a tal:attributes="href item/url"
                                 tal:content="item/name" />
                         </td>
-                        <td tal:content="item/personal_id" />
-                    </tr>
-                </tbody>
-            </table>
+                        <td tal:content="item/personal_id" /-->
+                    </div>
         
             <div metal:use-macro="context/batch_macros/macros/navigation" />
         
         </tal:block>
         
-
     </metal:main>
 </metal:main>
 

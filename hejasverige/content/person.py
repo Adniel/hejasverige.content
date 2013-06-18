@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import logging
 #from plone.indexer import indexer
 from plone.indexer.decorator import indexer
 from plone.directives import form
@@ -18,7 +19,9 @@ from plone.app.uuid.utils import uuidToObject
 from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.namedfile.field import NamedBlobImage
 from hejasverige.content.interfaces import IMyPages
+from zope.component.hooks import getSite
 
+logger = logging.getLogger(__name__)
 
 class ToShortPersonalId(ValidationError):
     "Ogiltig längd. 10 siffror."
@@ -118,7 +121,7 @@ def is_url(value):
         pattern = re.compile(r"^https?://[^\s\r\n]+")
         if pattern.search(value.strip()):
             return True
-    raise Invalid(_(u"Not a valid link"))
+    raise Invalid(_(u"Ogiltig länk"))
 
 
 class IEmail(form.Schema):
@@ -133,21 +136,21 @@ class IEmail(form.Schema):
         constraint=is_email,
     )
 
-    @invariant
-    def email_unique(data):
-        """The email must be unique, as it is the login name for a user.
+    #@invariant
+    #def email_unique(data):
+    #    """The email must be unique, as it is the login name for a user.
 
-        The tricky thing is to make sure editing a user and keeping
-        his email the same actually works.
-        """
-        user = data.__context__
-        if user is not None:
-            if hasattr(user, 'email') and user.email == data.email:
+    #    The tricky thing is to make sure editing a user and keeping
+    #    his email the same actually works.
+    #    """
+    #    user = data.__context__
+    #    if user is not None:
+    #        if hasattr(user, 'email') and user.email == data.email:
                 # No change, fine.
-                return
-        error = validate_unique_email(data.email)
-        if error:
-            raise Invalid(error)
+    #            return
+    #    error = validate_unique_email(data.email)
+    #    if error:
+    #        raise Invalid(error)
 
 
 class IPerson(IEmail):
@@ -166,7 +169,7 @@ class IPerson(IEmail):
 
     homepage = schema.TextLine(
         # url format
-        title=_(u"External Homepage"),
+        title=_(u"Extern Hemsida"),
         required=False,
         constraint=is_url,
         )
@@ -183,7 +186,7 @@ class IPerson(IEmail):
 
     form.widget(bio="plone.app.z3cform.wysiwyg.WysiwygFieldWidget")
     bio = schema.Text(
-        title=_(u"Om mig"),
+        title=_(u"Om personen"),
         required=False,
         )
 
@@ -351,6 +354,7 @@ class AddRelation(grok.View):
         
         #import pdb; pdb.set_trace()
         #alsoProvides(self, IMyPages)
+        self.return_view = self.request.form.get('return_view') or 'add-club'
         self.add_club = self.request.form.get('add-club') or None
         if self.add_club:
             member_type = self.request.form.get('type') or 'supporter'
@@ -553,7 +557,7 @@ class MyPerson(grok.View):
 
 
 
-class MyFamily(grok.View):
+class MyFamily1(grok.View):
     """View (called "@@my-family"") for a family.
 
     The associated template is found in person_templates/myfamily.pt.
@@ -561,7 +565,7 @@ class MyFamily(grok.View):
 
     grok.context(Interface)
     grok.require('zope2.View')
-    grok.name('my-family')
+    grok.name('my-family1')
     grok.implements(IMyPages)
     #grok.template('myfamily')
 
@@ -588,6 +592,61 @@ class MyFamily(grok.View):
         return retu
 
 
+class MyFamily(grok.View):
+    """View (called "@@my-family"") for a family.
+
+    The associated template is found in person_templates/myfamily.pt.
+    """
+
+    grok.context(Interface)
+    grok.require('zope2.View')
+    grok.name('my-family')
+    grok.implements(IMyPages)
+    #grok.template('myfamily')
+
+    def update(self):
+        """Called before rendering the template for this view
+        """
+        self.request.set('disable_border', True)
+        self.codes = ()
+
+    @memoize
+    def persons(self, start=0, size=11):
+        """Get all persons in this folder.
+        """
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        #import pdb; pdb.set_trace()
+        #family = [dict(url=person.getURL(), name=person.Title,
+        #          personal_id=person.personal_id) for person in 
+        family =  catalog({'object_provides': IPerson.__identifier__,
+                  'path': dict(query='/'.join(self.context.getPhysicalPath()),
+                  depth=1), 'sort_on': 'sortable_title', 'b_start': start,
+                  'b_size': size,})# ]
+
+        family_objs = [brain.getObject() for brain in family]
+
+        from plone.app.uuid.utils import uuidToObject
+        persons =[]
+
+        for item in family_objs:
+            clubs = [uuidToObject(relation.getObject().foreign_id) 
+                    for relation in
+                    catalog({'object_provides': IRelation.__identifier__,
+                    'path': dict(query='/'.join(item.getPhysicalPath()),
+                    depth=1),'sort_on': 'sortable_title'})]
+
+            clubs = [x for x in clubs if x]
+            persons.append({'name': item.first_name + ' ' + item.last_name, 
+                            'clubs': clubs, 
+                            'person': item})
+
+        return persons
+
+
+
+
+
 class MyClubs(grok.View):
     """View (called "@@my-clubs"") for a family.
 
@@ -610,9 +669,12 @@ class MyClubs(grok.View):
 
         catalog = getToolByName(self.context, 'portal_catalog')
 
-
+        portal_workflow = getToolByName(self.context, "portal_workflow")
+        
         clubs = [dict(clubobj=uuidToObject(relation.getObject().foreign_id),
-                relation=relation)
+                relation=relation, portal_type=relation.getObject().aq_inner.aq_parent.portal_type, 
+                parentobj=relation.getObject().aq_inner.aq_parent, 
+                status=portal_workflow.getStatusOf("hejasverige_relation_workflow", relation.getObject())['review_state'])
                 for relation in
                 catalog({'object_provides': IRelation.__identifier__,
                 'path': dict(query='/'.join(home.getPhysicalPath()),),
@@ -620,7 +682,7 @@ class MyClubs(grok.View):
 
         # for j in [i for i in dir(clubs[0].get('relation').getObject().aq_inner.aq_parent) if i.startswith('p')]: print j
         # clubs[0].get('relation').getObject().aq_inner.aq_parent.portal_type = 'hejasverige.person'
-        import pdb; pdb.set_trace()
+#        import pdb; pdb.set_trace()
         return clubs
 
     def update(self):
@@ -637,14 +699,17 @@ class MyClubs(grok.View):
 
         catalog = getToolByName(self.context, 'portal_catalog')
 
+        portal_workflow = getToolByName(self.context, "portal_workflow")
 
         clubs = [dict(clubobj=uuidToObject(relation.getObject().foreign_id),
-                relation=relation, portal_type=relation.getObject().aq_inner.aq_parent.portal_type)
+                relation=relation, portal_type=relation.getObject().aq_inner.aq_parent.portal_type, 
+                parentobj=relation.getObject().aq_inner.aq_parent, 
+                status=portal_workflow.getStatusOf("hejasverige_relation_workflow", relation.getObject())['review_state'])
                 for relation in
                 catalog({'object_provides': IRelation.__identifier__,
                 'path': dict(query='/'.join(home.getPhysicalPath()),),
                 'sort_on': 'sortable_title'})]
 
         
-        import pdb; pdb.set_trace()
+#        import pdb; pdb.set_trace()
     #    return "This is my clubs"

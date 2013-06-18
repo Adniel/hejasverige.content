@@ -50,7 +50,7 @@
             <span tal:replace="structure context/@@authenticator/authenticator" />
             
             <fieldset>
-                <legend i18n:translate="fieldset_legend_search">Filter</legend>
+                <!--legend i18n:translate="fieldset_legend_search">Filter</legend-->
               <label for="district">Distrikt:</label>
               <select id="district" name="district">
                 <option>(Alla distrikt)</option>

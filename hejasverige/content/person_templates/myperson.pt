@@ -7,15 +7,15 @@
       i18n:domain="hejasverige.content">
 <body>
 
-<metal:content-core fill-slot="content-core">
-    <metal:content-core define-macro="content-core">
+<metal:content-core fill-slot="main">
+    <metal:content-core define-macro="main">
 
     <!-- - INVOICES - -->
     <script type="text/javascript">
     $(function(){
       $('a#add-relation').prepOverlay({
         subtype: 'ajax',
-        filter: '#content>*'
+        filter: '#content>*',
         formselector: 'form',
         closeselector: 'a.add-club',
         noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
@@ -24,47 +24,60 @@
 
       });
     });
+    $(function(){
+      $('a#edit-person').prepOverlay({
+        subtype: 'ajax',
+        filter: '#content>*',
+        formselector: 'form',
+        closeselector: 'INPUT#form-buttons-cancel',
+        noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
+        redirect: function () {return location.href;},    
+        width:'50%'
+
+      });
+    });
     </script>
-        <div>
-            <label for="first_name" i18n:translate="label_first_name">First name:</label>
-            <span id="first_name" tal:content="context/first_name" />
-        </div>                
-        <div>
-            <label for="last_name" i18n:translate="label_last_name">Last name:</label>
-            <span id="last_name" tal:content="context/last_name" />
-        </div>                
-        <div>
-            <label for="personal_id" i18n:translate="label_personal_id">Personnummer:</label>
-            <span id="personal_id" tal:content="context/personal_id" />
-        </div>                
-        <div>
-          <a id="add-relation" tal:attributes="href string:${context/absolute_url}/@@add-relation">Lägg till relation</a>
-        </div>
-        <div>
-            <h2 i18n:translate="title_clubs">Medlem i</h2>
 
-            <dl>
-                <tal:block repeat="relation view/members">
-                    <dt>
-                        <!--span tal:define="state relation/review_state" tal:condition="python:state != 'pending'">*</span-->
-                        <a tal:attributes="href relation/absolute_url"
-                           tal:content="relation/title" />
-                    </dt>
-                </tal:block>
-            </dl>
+        <figure class="familj">
+            <img tal:define="scales context/@@images;
+                             thumbnail python: scales.scale('avatar', width=256, height=256);"
+                tal:condition="thumbnail"
+                tal:attributes="src thumbnail/url;
+                                width thumbnail/width;
+                                height thumbnail/height" />
 
-            <h2 i18n:translate="title_clubs">Supporterar</h2>
+            <figcaption>
+                <span id="first_name" tal:content="context/first_name" /> <span id="last_name" tal:content="context/last_name" />
+                (<a id="edit-person" tal:attributes="href string:${context/absolute_url}/edit">Redigera</a>)
+                <br />
+                <span id="personal_id" tal:content="context/personal_id" /><br />
+                <br/>
+                <a class="button" id="add-relation" tal:attributes="href string:${context/absolute_url}/@@add-relation">Lägg till förening</a>
+                <h3 class="" i18n:translate="title_clubs">Medlem i</h3>
 
-            <dl>
-                <tal:block repeat="relation view/supporters">
-                    <dt>
-                        <a tal:attributes="href relation/absolute_url"
-                           tal:content="relation/title" />
-                    </dt>
-                </tal:block>
-            </dl>
+                <ul>
+                    <tal:block repeat="relation view/members">
+                        <li>
+                            <!--span tal:define="state relation/review_state" tal:condition="python:state != 'pending'">*</span-->
+                            <a tal:attributes="href relation/absolute_url"
+                               tal:content="relation/title" />
+                        </li>
+                    </tal:block>
+                </ul>
 
-        </div>
+                <h3 class="" i18n:translate="title_clubs">Supporterar</h3>
+
+                <ul>
+                    <tal:block repeat="relation view/supporters">
+                        <li>
+                            <a tal:attributes="href relation/absolute_url"
+                               tal:content="relation/title" />
+                        </li>
+                    </tal:block>
+                </ul>
+            </figcaption>
+            
+        </figure>
     </metal:content-core>
 </metal:content-core>
 

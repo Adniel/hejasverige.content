@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="se"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
@@ -7,11 +7,96 @@
       i18n:domain="hejasverige.content">
 <body>
 
-<metal:content-core fill-slot="content-core">
-    <metal:content-core define-macro="content-core">
-        <span>Mina klubbor</span>
-    </metal:content-core>
-</metal:content-core>
+<metal:main fill-slot="main">
+    <metal:main define-macro="main"
+           tal:define="b_size   python:10;
+                       b_orphan python:1;
+                       b_start  request/b_start | python:0;
+                       content  python:view.clubs(start=b_start, size=b_size+b_orphan);">
+
+        <h1 class="documentFirstHeading"
+            i18n:translate="header_my_clubs">
+          Föreningar
+        </h1>
+        
+        <p class="documentDescription" i18n:translate="description_my_clubs">
+            Föreningar i min familj
+        </p>
+
+        <script type="text/javascript">
+        $(function($){
+          $('a#add-club').prepOverlay({
+            subtype: 'ajax',
+            filter: '#content>*',
+            formselector: 'form',
+            closeselector: 'a.add-club',
+            noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
+            redirect: function () {return location.href;},    
+            width:'50%'
+
+          });
+        });
+
+        $(function($){
+          $('a#view-club').prepOverlay({
+            subtype: 'ajax',
+            filter: '#content>*',
+            width:'50%'
+          });
+        });
+        </script>
+
+        <a id="add-club" class="button" tal:attributes="href string:${context/absolute_url}/@@add-relation">Lägg till förening</a>
+        <span>Observera att föreningar du lägger till här, är de som du själv är medlem i. Föreningar som hör till någon av dina familjemedlemmar läggs till på respektive person</span>
+        
+        <p tal:condition="not:content" i18n:translate="description_no_content_found">
+            Inga föreningar finns ännu registrerade
+        </p>
+        
+        <tal:block condition="content"
+                   define="Batch python:modules['Products.CMFPlone'].Batch;
+                           batch python:Batch(content, b_size, int(b_start), orphan=int(b_orphan));">
+        
+                    <div tal:repeat="club batch">
+						<figure class="forenings_nyhet">
+	                        <!--img tal:define="scales relative/person/@@images;
+	                                         thumbnail python: scales.scale('avatar', width=128, height=128);"
+	                            tal:condition="thumbnail"
+	                            tal:attributes="src thumbnail/url;
+	                                            width thumbnail/width;
+	                                            height thumbnail/height" /-->
+
+	                        <figcaption>
+	                            <a id="view-club" tal:attributes="href club/clubobj/absolute_url" href="#"><span tal:replace="club/clubobj/Title"/></a><br />
+	                            <tal:block tal:define="portal_type python:club.get('portal_type')=='hejasverige.person'">
+		                            <tal:ifblock tal:condition="portal_type">
+		                            	Medlem (<span tal:replace="club/status"/>): <span tal:replace="club/parentobj/first_name" /> <span tal:replace="club/parentobj/last_name" /> (<span tal:replace="club/parentobj/personal_id" />)
+		                            </tal:ifblock>
+		                            <tal:elseblock tal:condition="not:portal_type">
+		                            	Medlem (<span tal:replace="club/status"/>): Jag själv
+		                            </tal:elseblock>
+	                        	</tal:block>
+	                            <!--span tal:replace="relative/person/personal_id"/><br />
+	                            <tal:clubs tal:repeat="club relative/clubs">
+	                                <a href="#" tal:attributes="href club/absolute_url" id="clubinfo"><span tal:replace="club/title"/></a>
+	                            </tal:clubs-->
+	                        </figcaption>
+	                 		
+            			</figure>
+
+                        <!--td>
+                            <a tal:attributes="href item/url"
+                                tal:content="item/name" />
+                        </td>
+                        <td tal:content="item/personal_id" /-->
+                    </div>
+        
+            <div metal:use-macro="context/batch_macros/macros/navigation" />
+        
+        </tal:block>
+        
+    </metal:main>
+</metal:main>
 
 </body>
 </html>

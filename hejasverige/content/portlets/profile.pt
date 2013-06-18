@@ -18,7 +18,8 @@
     <!--PROFIL-->
     <section>
         <!--PROFILBILD/NAMN-->
-        <section tal:define="info view/myinfo" id="profil" class="profil block" >
+        <!--section tal:define="info view/myinfo" id="profil" class="profil block" -->
+        <div tal:define="info view/myinfo" id="profil" class="profil" >
             <figure style="margin-bottom:10px;">
                 <figcaption>
                     <span tal:replace="info/name">Default text</span>
@@ -58,7 +59,7 @@
                     </figure>
                 </tal:relatives>
             </section>
-        </section>
+        </div>
     </section>
     <dd class="portletFooter">
         <span class="portletBottomLeft"></span>

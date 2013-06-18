@@ -62,7 +62,7 @@ def patchedInsertForwardIndexEntry(self, entry, documentId):
 
     # this makes it possible to import external xml data but distroys when creating invoices
     # what to do? what to do?
-    #entry = safe_unicode(entry)
+    entry = safe_unicode(entry)
     indexRow = self._index.get(entry, _marker)
 
     # Make sure there's actually a row there already. If not, create

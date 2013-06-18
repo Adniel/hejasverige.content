@@ -1,0 +1,92 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="hejasverige.content">
+<body>
+
+<metal:main fill-slot="main">
+    <metal:main define-macro="main"
+           tal:define="b_size   python:10;
+                       b_orphan python:1;
+                       b_start  request/b_start | python:0;
+                       content  python:view.persons(start=b_start, size=b_size+b_orphan);">
+        
+        <h1 class="documentFirstHeading"
+            i18n:translate="header_my_family">
+          Min familj
+        </h1>
+        
+        <p class="documentDescription" i18n:translate="description_my_family">
+            Registrerade personer i min familj
+        </p>
+        
+        <form method="get" tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+            
+            <span tal:replace="structure context/@@authenticator/authenticator" />
+            
+            <fieldset>
+                <legend i18n:translate="fieldset_legend_search">Search parameters</legend>
+            
+                    <div i18n:translate="dam_report_code">
+                        Select a code
+                
+                        <select name="code" size="1">
+                            <option value="">Please select</option>
+                            <option
+                                tal:repeat="code view/codes"
+                                tal:attributes="value code;
+                                                selected python:currentSelection == code and 'selected' or None"
+                                tal:content="code"
+                                />
+                        </select>
+                
+                        <input type="submit" class="context" name="form.button.Search"
+                            value="Search"
+                            i18n:name="submit_button"
+                            i18n:attributes="value" />
+                    </div>
+            </fieldset>
+        </form>
+        
+        <h2 i18n:translate="heading_persons">Personer</h2>
+        
+        <p tal:condition="not:content" i18n:translate="description_no_content_found">
+            No content found
+        </p>
+        
+        <tal:block condition="content"
+                   define="Batch python:modules['Products.CMFPlone'].Batch;
+                           batch python:Batch(content, b_size, int(b_start), orphan=int(b_orphan));">
+        
+            
+            <table class="listing">
+                <thead>
+                    <tr>
+                        <th i18n:translate="column_label_name">Namn</th>
+                        <th i18n:translate="column_label_personal_id">Personnummer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr tal:repeat="item batch">
+                        <td>
+                            <a tal:attributes="href item/url"
+                                tal:content="item/name" />
+                        </td>
+                        <td tal:content="item/personal_id" />
+                    </tr>
+                </tbody>
+            </table>
+        
+            <div metal:use-macro="context/batch_macros/macros/navigation" />
+        
+        </tal:block>
+        
+
+    </metal:main>
+</metal:main>
+
+</body>
+</html>

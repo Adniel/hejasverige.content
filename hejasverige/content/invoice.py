@@ -40,7 +40,7 @@ class InvoiceFolderView(grok.View):
         """
         catalog = getToolByName(self.context, 'portal_catalog')
 
-        return [dict(url=invoice.getURL(), invoiceNo=invoice.invoiceNo,) for invoices in
+        return [dict(url=invoice.getURL(), invoiceNo=invoice.Title, id=invoice.id) for invoice in
                 catalog({'object_provides': IInvoice.__identifier__,
                 'path': dict(query='/'.join(self.context.getPhysicalPath()),
                 depth=1), 'sort_on': 'sortable_title'})]
