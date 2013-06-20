@@ -66,7 +66,7 @@
 
   <include package="collective.monkeypatcher" />
 
-  <!--monkey:patch
+  <monkey:patch
       description="This works around problems with handling the forward index unicode from the external club import"
       class="Products.PluginIndexes.common.UnIndex.UnIndex"
       original="removeForwardIndexEntry"
@@ -84,7 +84,7 @@
       class="Products.CMFCore.ActionInformation.Action"
       original="getInfoData"
       replacement=".patches.patchedGetInfoData"
-      /-->
+      />
 
 
 
