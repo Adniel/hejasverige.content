@@ -28,6 +28,7 @@
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="plone.app.referenceablebehavior.referenceable.IReferenceable" />
         <element value="plone.app.dexterity.behaviors.metadata.IDublinCore" />
+        <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>
     </property>
     
     <!-- Views and aliases -->
@@ -50,5 +51,4 @@
         url_expr="string:${object_url}/edit" visible="True">
         <permission value="Modify portal content"/>
     </action>
-
 </object>

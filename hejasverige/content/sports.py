@@ -5,6 +5,7 @@ from zope import schema
 from hejasverige.content import _
 #from hejasverige.member.member import IMember
 from hejasverige.content.interfaces import IMyPages
+from plone.indexer.decorator import indexer
 
 from zope.interface import Invalid
 from plone.directives import form
@@ -266,6 +267,17 @@ class IClub(form.Schema, IImageScaleTraversable):
         required=False,
     )
 
+
+@grok.adapter(IClub, name='externalId')
+@indexer(IClub)
+def relationExternalIdIndexer(context):
+    """Create a catalogue indexer, registered as an adapter, which can
+    populate the ``externalId`` index with the related uid of the club.
+    """
+    externalId = context.VatNo
+    print "Indexing", externalId, "as external id for Club with id ", context.UID, "."
+    #import pdb; pdb.set_trace()
+    return externalId
 
 
 class ClubView(grok.View):

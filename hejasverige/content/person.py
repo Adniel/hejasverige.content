@@ -153,7 +153,8 @@ class IEmail(form.Schema):
     #        raise Invalid(error)
 
 
-class IPerson(IEmail):
+#class IPerson(IEmail):
+class IPerson(form.Schema):
     """ A person object filed for a user 
     """
 
@@ -167,12 +168,12 @@ class IPerson(IEmail):
         required=True,
         )
 
-    homepage = schema.TextLine(
+    #homepage = schema.TextLine(
         # url format
-        title=_(u"Extern Hemsida"),
-        required=False,
-        constraint=is_url,
-        )
+    #    title=_(u"Extern Hemsida"),
+    #    required=False,
+    #    constraint=is_url,
+    #    )
 
     personal_id = schema.ASCIILine(
         title=_(u"Personnummer"),
@@ -184,11 +185,11 @@ class IPerson(IEmail):
                            description=_(u'Ladda upp en bild på personen'
                            ), required=False)
 
-    form.widget(bio="plone.app.z3cform.wysiwyg.WysiwygFieldWidget")
-    bio = schema.Text(
-        title=_(u"Om personen"),
-        required=False,
-        )
+    #form.widget(bio="plone.app.z3cform.wysiwyg.WysiwygFieldWidget")
+    #bio = schema.Text(
+    #    title=_(u"Om personen"),
+    #    required=False,
+    #    )
 
 class IRelationFolder(form.Schema):
     """ A relation folder used to contain relations in 

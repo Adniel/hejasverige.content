@@ -23,13 +23,14 @@
  
     <!-- enabled behaviors -->
     <property name="behaviors">
-         <element value="plone.app.dexterity.behaviors.metadata.ICategorization" />
-         <element value="plone.app.dexterity.behaviors.metadata.IPublication" />
-         <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
+         <!--element value="plone.app.dexterity.behaviors.metadata.ICategorization" /-->
+         <!--element value="plone.app.dexterity.behaviors.metadata.IPublication" /-->
+         <!--element value="plone.app.dexterity.behaviors.metadata.IOwnership" /-->
         <!--element value="plone.app.dexterity.behaviors.metadata.IDublinCore" /-->
         <!--element value="plone.app.content.interfaces.INameFromTitle" /-->
         <element value="hejasverige.content.person.INameFromFullName" />
         <element value="plone.app.referenceablebehavior.referenceable.IReferenceable" />
+        <!--element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/--> 
     </property>
     
     <!-- Views and aliases -->
