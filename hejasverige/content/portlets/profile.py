@@ -106,7 +106,7 @@ class Renderer(base.Renderer):
                 info['amount_pending'] = 'error'
             else:
                 import locale
-                locale.setlocale(locale.LC_ALL, 'sv_SE')
+                locale.setlocale(locale.LC_ALL, '')
                 try:
                     accountinfo = Bank().getAccount(personalid=pid, context=self)
                     info['balance'] = locale.currency(accountinfo.get('Balance', None), grouping=True)
