@@ -124,7 +124,7 @@ from zope.formlib.interfaces import ConversionError
 from zope.formlib.i18n import _
 
 def _patchedToFieldValue(self, input):
-    print 'Patched!!!'
+    #print 'Patched!!!'
     from Products.CMFPlone.utils import safe_unicode               
     #if self.convert_missing_value and input == self._missing:
     if self.convert_missing_value and safe_unicode(input) == self._missing:
