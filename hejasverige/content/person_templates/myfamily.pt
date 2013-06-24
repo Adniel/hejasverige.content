@@ -30,8 +30,8 @@
             filter: '#content>*',
             formselector: 'form',
             closeselector: 'INPUT#form-buttons-cancel',
-            noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
-            redirect: function () {return location.href;},    
+            noform: 'redirect',
+            redirect: function () {return location.href;}, 
             width:'50%'
 
           });
