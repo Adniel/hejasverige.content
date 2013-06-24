@@ -87,5 +87,12 @@
       />
 
 
+  <monkey:patch
+      description="Impossible to register new users with ÅÄÖ in fullname. Handles unicode error in zope.formlib.textwidgets.TextWidget"
+      class="zope.formlib.textwidgets.TextWidget"
+      original="_toFieldValue"
+      replacement=".patches._patchedToFieldValue"
+      />
+
 
 </configure>

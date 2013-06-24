@@ -114,7 +114,6 @@ class Renderer(base.Renderer):
                 except:
                     info['balance'] = 'conerror'
                     info['amount_pending'] = 'conerror'
-
         #import pdb; pdb.set_trace()
         return info        
     

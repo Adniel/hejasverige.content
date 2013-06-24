@@ -119,3 +119,24 @@ def patchedGetInfoData(self):
         lazy_map[id] = val
 
     return (lazy_map, lazy_keys)
+
+from zope.formlib.interfaces import ConversionError
+from zope.formlib.i18n import _
+
+def _patchedToFieldValue(self, input):
+    print 'Patched!!!'
+    from Products.CMFPlone.utils import safe_unicode               
+    #if self.convert_missing_value and input == self._missing:
+    if self.convert_missing_value and safe_unicode(input) == self._missing:
+        value = self.context.missing_value
+    else:
+        # We convert everything to unicode. This might seem a bit crude,
+        # but anything contained in a TextWidget should be representable
+        # as a string. Note that you always have the choice of overriding
+        # the method.
+        try:
+            value = safe_unicode(input)
+            #value = unicode(input)
+        except ValueError, v:
+            raise ConversionError(_("Invalid text data"), v)
+    return value
