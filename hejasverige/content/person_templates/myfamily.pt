@@ -36,6 +36,18 @@
 
           });
         });
+        $(function($){
+          $('a#delete-person').prepOverlay({
+            subtype: 'ajax',
+            filter: '#content>*',
+            formselector: 'form',
+            closeselector: "INPUT[name='form.button.Cancel']",
+            noform: 'redirect',
+            redirect: function () {return location.href;}, 
+            width:'50%'
+
+          });
+        });
         </script>
 
         <a id="add-person" class="button" tal:attributes="href string:${context/absolute_url}/++add++hejasverige.person">Lägg till person</a>
@@ -59,6 +71,7 @@
 	                                            width thumbnail/width;
 	                                            height thumbnail/height" />
 
+                          <span style="float:right;"><a class="gray" id="delete-person" href="#" tal:attributes="href string:${relative/person/absolute_url}/delete_confirmation">Ta bort</a></span>
 	                        <figcaption>
 	                            <a tal:attributes="href string:${relative/person/absolute_url}/my-person" href="#"><span tal:replace="relative/name"/></a><br />
 	                            <span tal:replace="relative/person/personal_id"/><br />
@@ -66,7 +79,6 @@
 	                                <a href="#" tal:attributes="href club/absolute_url" id="clubinfo"><span tal:replace="club/title"/></a>
 	                            </tal:clubs>
 	                        </figcaption>
-	                 		
             			</figure>
 
                         <!--td>
