@@ -20,15 +20,22 @@ from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.namedfile.field import NamedBlobImage
 from hejasverige.content.interfaces import IMyPages
 from zope.component.hooks import getSite
+from plone import api
 
 logger = logging.getLogger(__name__)
 
 class ToShortPersonalId(ValidationError):
-    "Ogiltig längd. 10 siffror."
+    "Ogiltig längd. 10 siffror (YYMMDDNNNN)."
 
 
 class IllegalCheckDigit(ValidationError):
     "Ogiltig checksiffra"
+
+class PersonalIdNotUnique(ValidationError):
+    "Det finns redan en person med detta personnummer registrerad som anhörig till dig."
+
+class ThisIsYourOwnPersonalId(ValidationError):
+    "Personen har samma personnummer som du själv. Det är inte möjligt."
 
 def get_brains_for_email(context, email, request=None):
     """Anonymous users should be able to look for email addresses.
@@ -92,6 +99,38 @@ def validate_unique_email(email, context=None):
     logger.debug(msg)
     return msg
 
+def get_personal_ids_for_user(context=None):
+    if context is None:
+        context = getSite()
+
+    mship = getToolByName(context, 'portal_membership')
+
+    home = mship.getHomeFolder()
+
+    catalog = getToolByName(context, "portal_catalog", None)
+
+    personal_ids = [person.personal_id for person in 
+                   catalog({'object_provides': IPerson.__identifier__,
+                           'path': dict(query='/'.join(home.getPhysicalPath()),), })]
+
+
+    return personal_ids
+
+def validate_unique_personal_id(personal_id, context=None):
+    existing_personal_ids = get_personal_ids_for_user()
+
+    if personal_id in existing_personal_ids:
+        return False
+    return True
+
+def validate_is_not_own_personal_id(personal_id, context=None):
+    current_user = api.user.get_current()
+    current_personal_id = current_user.getProperty('personal_id')
+
+    if personal_id == current_personal_id:
+        return False
+    return True
+
 def personal_id_check_digit(p):
     a,p=[0,2,4,6,8,1,3,5,7,9],[int(i) for i in p]
     return 10-(a[p[0]]+p[1]+a[p[2]]+p[3]+a[p[4]]+p[5]+a[p[6]]+p[7]+a[p[8]])%10
@@ -104,6 +143,13 @@ def validatePersonalId(value):
         elif personal_id_check_digit(value) != int(value[9:]):
             # verify that checkdigit is ok
             raise IllegalCheckDigit(value)
+    
+        #import pdb; pdb.set_trace()
+
+        if not validate_unique_personal_id(value):
+            raise PersonalIdNotUnique(value)
+        if not validate_is_not_own_personal_id(value):
+            raise ThisIsYourOwnPersonalId(value)
 
     return True
 
