@@ -4,20 +4,23 @@
 				then add it to portal types -> Plone Site -> available views 
 				then select it from the display menu		
 	-->
-	<object name="hejasverige.MerchantFolder" meta_type="Dexterity FTI" />
-	<object name="hejasverige.Merchant" 	  meta_type="Dexterity FTI" />
-	<object name="hejasverige.Store" 	  	  meta_type="Dexterity FTI" />
-	<object name="hejasverige.Pos" 	          meta_type="Dexterity FTI" />
+	<object name="hejasverige.MerchantFolder"    meta_type="Dexterity FTI" />
+	<object name="hejasverige.Merchant" 	     meta_type="Dexterity FTI" />
+	<object name="hejasverige.Store" 	  	     meta_type="Dexterity FTI" />
+	<object name="hejasverige.Pos" 	             meta_type="Dexterity FTI" />
 
-	<object name="hejasverige.DistrictFolder" meta_type="Dexterity FTI" />
-	<object name="hejasverige.District" 	  meta_type="Dexterity FTI" />
-	<object name="hejasverige.Council" 	      meta_type="Dexterity FTI" />
-	<object name="hejasverige.Club" 	      meta_type="Dexterity FTI" />
+	<object name="hejasverige.DistrictFolder"    meta_type="Dexterity FTI" />
+	<object name="hejasverige.District" 	     meta_type="Dexterity FTI" />
+	<object name="hejasverige.Council" 	         meta_type="Dexterity FTI" />
+	<object name="hejasverige.Club" 	         meta_type="Dexterity FTI" />
 
-	<object name="hejasverige.InvoiceFolder"  meta_type="Dexterity FTI" />
-	<object name="hejasverige.Invoice" 	      meta_type="Dexterity FTI" />
+	<object name="hejasverige.InvoiceFolder"     meta_type="Dexterity FTI" />
+	<object name="hejasverige.Invoice" 	         meta_type="Dexterity FTI" />
 
-	<object name="hejasverige.person"		  meta_type="Dexterity FTI" />
-	<object name="hejasverige.relation"		  meta_type="Dexterity FTI" />
-	<object name="hejasverige.relationfolder" meta_type="Dexterity FTI" />
+	<object name="hejasverige.person"		     meta_type="Dexterity FTI" />
+	<object name="hejasverige.relation"		     meta_type="Dexterity FTI" />
+	<object name="hejasverige.relationfolder"    meta_type="Dexterity FTI" />
+
+	<object name="hejasverige.invitation"        meta_type="Dexterity FTI" />
+	<object name="hejasverige.invitationfolder"  meta_type="Dexterity FTI" />
 </object>

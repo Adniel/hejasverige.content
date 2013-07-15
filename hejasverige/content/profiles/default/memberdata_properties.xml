@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <object name="portal_memberdata" meta_type="Plone Memberdata Tool">
+ <property name="address1" type="string"></property>
+ <property name="address2" type="string"></property>
+ <property name="postal_code" type="string"></property>
+ <property name="city" type="string"></property>
  <property name="personal_id" type="string"></property>
  <property name="kollkoll" type="boolean"></property>
 </object>

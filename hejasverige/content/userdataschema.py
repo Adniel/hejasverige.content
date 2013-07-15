@@ -35,7 +35,7 @@ class PersonalIdAlreadyRegistered(ValidationError):
 
 def personal_id_check_digit(p):
     a,p=[0,2,4,6,8,1,3,5,7,9],[int(i) for i in p]
-    return 10-(a[p[0]]+p[1]+a[p[2]]+p[3]+a[p[4]]+p[5]+a[p[6]]+p[7]+a[p[8]])%10
+    return (10-(a[p[0]]+p[1]+a[p[2]]+p[3]+a[p[4]]+p[5]+a[p[6]]+p[7]+a[p[8]]))%10
 
 
 def validateAccept(value):
@@ -66,6 +66,33 @@ class IEnhancedUserDataSchema(IUserDataSchema):
     """ Use all the fields from the default user data schema, and add various
     extra fields.
     """
+    address1 = schema.TextLine(
+        title=_(u'label_address1', default=u'Adress 1'),
+        description=_(u'help_address1',
+                      default=u"Storgatan 1"),
+        required=False,
+        )
+
+    address2 = schema.TextLine(
+        title=_(u'label_address2', default=u'Adress 2'),
+        description=_(u'help_address1',
+                      default=u""),
+        required=False,
+        )
+
+    postal_code = schema.TextLine(
+        title=_(u'label_postal_code', default=u'Postnummer'),
+        description=_(u'help_postal_code',
+                      default=u"123 45"),
+        required=False,
+        )
+
+    city = schema.TextLine(
+        title=_(u'label_city', default=u'Ort'),
+        description=_(u'help_city',
+                      default=u"Storstan"),
+        required=False,
+        )
 
     personal_id = schema.TextLine(
         title=_(u'label_personal_id', default=u'Personnummer'),

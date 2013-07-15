@@ -9,7 +9,7 @@
 
 <metal:main fill-slot="main">
     <metal:main define-macro="main"
-       tal:define="b_size   python:10;
+       tal:define="b_size   python:20;
                        b_orphan python:1;
                        b_start  request/b_start | python:0;
                        content  python:view.clubs(start=b_start, size=b_size+b_orphan);

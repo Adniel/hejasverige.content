@@ -71,7 +71,7 @@ def validate_unique_email(email, context=None):
         context = getSite()
     matches = get_brains_for_email(context, email)
     if not matches:
-        # This email is not used yet.  Fine.
+        # This email is not used yet. Fine.
         return
     if len(matches) > 1:
         msg = "Multiple matches on email %s" % email
@@ -120,6 +120,7 @@ def validate_unique_personal_id(personal_id, context=None):
     existing_personal_ids = get_personal_ids_for_user()
 
     if personal_id in existing_personal_ids:
+
         return False
     return True
 
@@ -144,10 +145,11 @@ def validatePersonalId(value):
             # verify that checkdigit is ok
             raise IllegalCheckDigit(value)
     
-        #import pdb; pdb.set_trace()
+        # Needs update. You can not edit with this in place since the personal id already exists for the 
+        # edited person
+        #if not validate_unique_personal_id(value):
+        #    raise PersonalIdNotUnique(value)
 
-        if not validate_unique_personal_id(value):
-            raise PersonalIdNotUnique(value)
         if not validate_is_not_own_personal_id(value):
             raise ThisIsYourOwnPersonalId(value)
 

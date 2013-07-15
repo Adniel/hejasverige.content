@@ -49,6 +49,7 @@
   <exit-transition transition_id="retract"/>
  </state>
  <state state_id="supporter" title="Supporter">
+  <exit-transition transition_id="retract"/>
  </state>
  <transition transition_id="approve" title="Approves relation" new_state="approved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=approve" category="workflow" icon="">Approve</action>

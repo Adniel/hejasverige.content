@@ -4,6 +4,8 @@ from Products.CMFCore.utils import getToolByName
 from zope.component.hooks import getSite
 from AccessControl.SecurityManagement import newSecurityManager
 
+import logging
+logger = logging.getLogger(__name__)
 
 @grok.subscribe(IUserLoggedInEvent)
 def createUserFolders(event):
@@ -17,7 +19,7 @@ def createUserFolders(event):
         return
     if inst.isProductInstalled('hejasverige.content'):
         userid = event.principal.getId()
-        print 'Creating content folders for %s' % str(userid)
+        logger.info('Creating content folders for %s' % str(userid))
 
         _getFolder(userid, 'my-family', 'Folder')
         _getFolder(userid, 'my-clubs', 'hejasverige.relationfolder')
@@ -29,19 +31,18 @@ def _getFolder(userid, id, type_name):
     mship = getToolByName(context, 'portal_membership')
     current_auth = mship.getAuthenticatedMember()
     homefolder = mship.getHomeFolder(userid)
-    print 'Found home folder %s' % str(homefolder)
+    logger.info('Found home folder %s' % str(homefolder))
     if homefolder is None:
         try:
             mship.createMemberarea(userid)
         except Exception as e:
-            print 'Could not create member area'
-            print str(e)
+            logger.info('Could not create member area: %s' % str(e))
 
         homefolder = mship.getHomeFolder(userid)
         print 'Homefolder = %s' % str(homefolder)
 
     if not id in homefolder.objectIds():
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
 
         #user = self._getOwner(homefolder)
         #if not user:
