@@ -352,6 +352,106 @@ def Title(object, **kw):
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import addContentToContainer
 from plone.uuid.interfaces import IUUID
+class ShowAddRelationForm(grok.View):
+    """
+    """
+
+    grok.context(Interface)
+    grok.require('zope2.View')
+    grok.name('add-relation2')
+    grok.implements(IMyPages)
+
+    def add_relation(self, id, member_type='supporter'):
+        relobj = createContent(portal_type='hejasverige.relation',
+                                 foreign_id=id,
+                                )
+
+        #import pdb; pdb.set_trace()
+
+        try:
+            item = addContentToContainer(container=self.__parent__, object=relobj, checkConstraints=False)
+        except Exception, ex:
+            err = 'Unable to add relation with id', id, 'to', str(self.__parent__), 'due to', str(ex)
+            print err
+            #log(err)
+            return None
+        else:
+            # Push to correct state depending on type
+            workflowTool = getToolByName(item, 'portal_workflow')
+            if member_type == 'member':
+                transition = 'pend'
+            else:
+                transition = 'support'
+
+            try:
+                workflowTool.doActionFor(item, transition, comment='')
+                print "Object", item.id, "changed state"
+            except WorkflowException:
+                print "Could not apply workflow transition", transition, ".", item.id, "state not changed"
+
+        return item
+
+
+    def districts(self):
+        catalog = getToolByName(self.context, 'portal_catalog')
+
+        return  [dict(name=district.Title, value=district.id)
+                for district in
+                catalog({'object_provides': IDistrict.__identifier__,
+                'sort_on': 'sortable_title'})]
+
+
+    def councils(self):
+        catalog = getToolByName(self.context, 'portal_catalog')
+
+        query_dict = {'object_provides': ICouncil.__identifier__,
+                      'sort_on': 'sortable_title'
+                     }
+        if self.selectedDistrictPath:
+            query_dict['path'] = dict(query=self.selectedDistrictPath)
+        
+            return  [dict(name=council.Title, value=council.id)
+                    for council in
+                    catalog(query_dict)]
+
+    def sports(self):
+        catalog = getToolByName(self.context, 'portal_catalog')
+        #import pdb; pdb.set_trace()
+
+        #uniqueValuesFor        
+        return [{'name': 'Dart', 'value':'Dart'},{'name': 'Fotboll', 'value': 'Fotboll'}]
+
+    def update(self):
+        self.add_club = self.request.form.get('add-club') or None
+        if self.add_club:
+            member_type = self.request.form.get('type') or 'supporter'
+            print 'Member type:', member_type
+            # add a new relation object. Then redirect to my-person
+            self.add_relation(self.add_club, member_type=member_type)
+            self.redirect(self.url('my-person'))
+
+        self.request.set('disable_border', True)
+        self.selectedDistrict = self.request.form.get('district') or None
+        self.selectedDistrictPath = None
+        self.selectedCouncil = self.request.form.get('council') or None
+        self.selectedCouncilPath = None
+
+        self.selectedSport = self.request.form.get('sport') or None
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        if self.selectedDistrict:
+            # get the path to the selected district
+            selectedDistrictBrains = catalog({'object_provides': IDistrict.__identifier__, 'id': self.selectedDistrict})
+            if len(selectedDistrictBrains) > 0:
+                self.selectedDistrictPath = selectedDistrictBrains[0].getPath()
+
+        if self.selectedCouncil:
+            # get the path to the selected district
+            selectedCouncilBrains = catalog({'object_provides': ICouncil.__identifier__, 'id': self.selectedCouncil})
+            if len(selectedCouncilBrains) > 0:
+                self.selectedCouncilPath = selectedCouncilBrains[0].getPath()
+
+
 
 class AddRelation(grok.View):
     """

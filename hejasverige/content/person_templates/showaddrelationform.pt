@@ -9,11 +9,7 @@
 
 <metal:main fill-slot="main">
     <metal:main define-macro="main"
-       tal:define="b_size   python:20;
-                       b_orphan python:1;
-                       b_start  request/b_start | python:0;
-                       content  python:view.clubs(start=b_start, size=b_size+b_orphan);
-                       currentSelectedSport view/selectedSport;
+       tal:define="    currentSelectedSport view/selectedSport;
                        currentSelectedDistrict view/selectedDistrict;
                        currentSelectedCouncil view/selectedCouncil;"
                        >
@@ -25,19 +21,58 @@
         <script type="text/javascript">
         $(function() {
             $('#district').change(function() {
-                this.form.submit();
+              alert('district yea')
+              sendclubform(this.form);
             });
-        });
-        $(function() {
             $('#council').change(function() {
-                this.form.submit();
+                sendclubform(this.form);
             });
-        });
-        $(function() {
+
             $('#sport').change(function() {
-                this.form.submit();
+                sendclubform(this.form);
             });
+
+            sendclubform = function (o) {
+                alert('ok, now run submit');
+                //o.submit(
+                //  function(event) {
+                //    alert('hey');
+
+                    /* stop form from submitting normally */
+                    //event.preventDefault();
+                    /* get some values from elements on the page: */
+                    
+                    var $form = $(o),
+                      district = $form.find('input[name="district"]').val(),
+                      council = $form.find('input[name="council"]').val(),
+                      sport = $form.find('input[name="sport"]').val(),
+                      _authenticator = $form.find('input[name="_authenticator"]').val(),
+                      url = $form.attr('action');
+                    
+                    /* Send the data using post */
+                    
+                    var posting = $.post( url, { 
+                                                district: district,
+                                                council: council, 
+                                                sport: sport,
+                                                _authenticator: _authenticator,
+                                             });
+                    
+                    /* Put the results in a div */
+                    
+                    posting.done(function( data )
+                    { 
+                      var content = $( data ).find( '#content' );
+                      $( "#addclub.content" ).empty().append( content ); 
+                      alert(data)
+                    });
+                  
+               // }
+              //);
+            };
+
         });
+
         $(function(){
           $('a#clubinfo').prepOverlay({
             subtype: 'ajax',
@@ -45,7 +80,7 @@
           });
         });        
         </script>   
-        <form method="post" tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+        <form method="post" id="clubfilter" tal:attributes="action string:${context/absolute_url}/${view/__name__}">
             
             <span tal:replace="structure context/@@authenticator/authenticator" />
             
@@ -89,45 +124,8 @@
                   i18n:attributes="value" />
             </fieldset>
         </form>
+        <div id="addclub.content" />
 
-        <p tal:condition="not:content" i18n:translate="description_no_content_found">
-            Det finns inga föreningar
-        </p>
-        
-        <tal:block condition="content"
-                   define="Batch python:modules['Products.CMFPlone'].Batch;
-                           batch python:Batch(content, b_size, int(b_start), orphan=int(b_orphan));">
-        
-            <table class="listing">
-                <thead>
-                    <tr>
-                        <th i18n:translate="column_label_name">Namn</th>
-                        <th i18n:translate="column_label_sport">Sport</th>
-                        <th/>
-                        <!--th/-->
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr tal:repeat="item batch">
-                      <td>
-                          <a id="clubinfo" tal:attributes="href item/url"
-                              tal:content="item/title" />
-
-                      </td>
-                      <td tal:content="item/sport" />
-                      <!--td>
-                        <a title="Välj detta alternativ om du vill bidra till föreningen när du handlar" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=support">Supportera</a>
-                      </td-->
-                      <td>
-                        <a title="Välj detta alternativ om du vill bli medlem i föreningen" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=member">Jag är medlem</a>
-                      </td>
-                    </tr>
-                </tbody>
-            </table>
-        
-            <div metal:use-macro="context/batch_macros/macros/navigation" />
-        
-        </tal:block>
     </metal:main>
 </metal:main>
 
