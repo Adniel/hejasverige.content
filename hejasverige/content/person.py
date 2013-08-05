@@ -503,14 +503,23 @@ class AddRelation(grok.View):
         
         #import pdb; pdb.set_trace()
         #alsoProvides(self, IMyPages)
-        self.return_view = self.request.form.get('return_view') or 'add-club'
+        #return_view should be either my-person or add-club
         self.add_club = self.request.form.get('add-club') or None
         if self.add_club:
+            self.return_view = self.request.form.get('return_view') or 'add-club'
             member_type = self.request.form.get('type') or 'supporter'
             print 'Member type:', member_type
             # add a new relation object. Then redirect to my-person
             self.add_relation(self.add_club, member_type=member_type)
-            self.redirect(self.url('my-person'))
+
+            #self.redirect(self.url('my-person'))
+            self.redirect(self.url(self.return_view))
+        else:
+            #import pdb; pdb.set_trace()
+            if self._BrowserView__getParent().Type() == 'Person':
+                self.return_view = 'my-person'
+            else:
+                self.return_view = 'my-clubs'
 
         self.request.set('disable_border', True)
         self.selectedDistrict = self.request.form.get('district') or None

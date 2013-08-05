@@ -119,7 +119,7 @@
                         <a title="Välj detta alternativ om du vill bidra till föreningen när du handlar" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=support">Supportera</a>
                       </td-->
                       <td>
-                        <a title="Välj detta alternativ om du vill bli medlem i föreningen" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=member">Jag är medlem</a>
+                        <a title="Välj detta alternativ om du vill bli medlem i föreningen" name="add-club" tal:attributes="href string:${context/absolute_url}/${view/__name__}?add-club=${item/uid}&type=member&return_view=${view/return_view}">Jag är medlem</a>
                       </td>
                     </tr>
                 </tbody>
