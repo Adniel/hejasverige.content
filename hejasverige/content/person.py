@@ -620,7 +620,7 @@ class AbortRelationView(grok.View):
     grok.template('abortrelation')
 
     def update(self):
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         button_ok = self.request.form.get('form.button.Ok') or None
         if button_ok:
             workflowTool = getToolByName(self.context, 'portal_workflow')
