@@ -866,7 +866,7 @@ class MyClubs(grok.View):
     def clubs(self, start=0, size=11):
         """Get all clubs related to a person.
         """
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         mship = getToolByName(self.context, 'portal_membership')
 
         home = mship.getHomeFolder()
