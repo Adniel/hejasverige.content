@@ -613,6 +613,35 @@ class AddRelation(grok.View):
         #uniqueValuesFor        
         return [{'name': 'Dart', 'value':'Dart'},{'name': 'Fotboll', 'value': 'Fotboll'}]
 
+class AbortRelationView(grok.View):
+    grok.context(IRelation)
+    grok.require('zope2.View')
+    grok.name('abort')
+    grok.template('abortrelation')
+
+    def update(self):
+        import pdb; pdb.set_trace()
+        button_ok = self.request.form.get('form.button.Ok') or None
+        if button_ok:
+            workflowTool = getToolByName(self.context, 'portal_workflow')
+            try:
+                workflowTool.doActionFor(self.__parent__, 'abort', comment='')
+            except WorkflowException, ex:
+                print "Could not apply workflow transition 'abort'.", self.__parent__.UID(), "with foreign_id", self.__parent__.foreign_id,"state not changed.", ex
+
+            if self._BrowserView__getParent().__parent__.Type() == 'Person':
+                return_view = 'my-person'
+            else:
+                return_view = 'my-clubs'
+
+            self.redirect(self.url(return_view))
+        else:
+            self.title = uuidToObject(self.context.foreign_id).Title()
+            if self.__parent__.__parent__.Type() == 'Person':
+                self.remove_from = self.__parent__.__parent__.first_name + ' ' + self.__parent__.__parent__.last_name
+            else:
+                self.remove_from = _(u'dig själv')
+
 # temp view for reindexing brains
 from Products.CMFCore.interfaces import ISiteRoot
 class ReindexBrains(grok.View):
@@ -666,6 +695,8 @@ class MyPerson(grok.View):
         """
 
         catalog = getToolByName(self.context, 'portal_catalog')
+        portal_workflow = getToolByName(self.context, "portal_workflow")
+
         # import pdb;pdb.set_trace()
 
         # # # # # # # #
@@ -685,7 +716,20 @@ class MyPerson(grok.View):
         # is inside the list)
         member_objs = [x for x in member_objs if x]
 
-        return member_objs
+        #return member_objs
+
+        clubs = [dict(clubobj=uuidToObject(relation.getObject().foreign_id),
+                relation=relation, portal_type=relation.getObject().aq_inner.aq_parent.portal_type, 
+                parentobj=relation.getObject().aq_inner.aq_parent, 
+                status=portal_workflow.getStatusOf("hejasverige_relation_workflow", relation.getObject())['review_state'])
+                for relation in
+                catalog({'object_provides': IRelation.__identifier__,
+                'review_state': ('pending', 'approved'),                    
+                'path': dict(query='/'.join(self.context.getPhysicalPath()),
+                depth=1), 'sort_on': 'sortable_title',})]
+
+        return clubs
+
 
     @memoize
     def supporters(self):
@@ -791,6 +835,7 @@ class MyFamily(grok.View):
             clubs = [uuidToObject(relation.getObject().foreign_id) 
                     for relation in
                     catalog({'object_provides': IRelation.__identifier__,
+                    'review_state': ('pending', 'approved'),                                                                
                     'path': dict(query='/'.join(item.getPhysicalPath()),
                     depth=1),'sort_on': 'sortable_title'})]
 
@@ -821,6 +866,7 @@ class MyClubs(grok.View):
     def clubs(self, start=0, size=11):
         """Get all clubs related to a person.
         """
+        import pdb; pdb.set_trace()
         mship = getToolByName(self.context, 'portal_membership')
 
         home = mship.getHomeFolder()
@@ -835,9 +881,11 @@ class MyClubs(grok.View):
                 status=portal_workflow.getStatusOf("hejasverige_relation_workflow", relation.getObject())['review_state'])
                 for relation in
                 catalog({'object_provides': IRelation.__identifier__,
+                'review_state': ('pending', 'approved'),                                        
                 'path': dict(query='/'.join(home.getPhysicalPath()),),
                 'sort_on': 'sortable_title'})]
 
+        clubs = [x for x in clubs if x['clubobj']]
         # for j in [i for i in dir(clubs[0].get('relation').getObject().aq_inner.aq_parent) if i.startswith('p')]: print j
         # clubs[0].get('relation').getObject().aq_inner.aq_parent.portal_type = 'hejasverige.person'
 #        import pdb; pdb.set_trace()

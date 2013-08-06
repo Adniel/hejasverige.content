@@ -138,6 +138,7 @@ class Renderer(base.Renderer):
             clubs = [uuidToObject(relation.getObject().foreign_id) 
                     for relation in
                     catalog({'object_provides': IRelation.__identifier__,
+                    'review_state': ('pending', 'approved'),                                        
                     'path': dict(query='/'.join(item.getPhysicalPath()),
                     depth=1),'sort_on': 'sortable_title'})]
 

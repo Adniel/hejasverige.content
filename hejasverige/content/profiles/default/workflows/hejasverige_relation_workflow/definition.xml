@@ -4,7 +4,12 @@
  <permission>Change portal events</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
+ <state state_id="aborted" title="Aborted">
+  <exit-transition transition_id="pend"/>
+  <exit-transition transition_id="support"/>
+ </state>
  <state state_id="approved" title="Approved">
+  <exit-transition transition_id="abort"/>
   <exit-transition transition_id="retract"/>
  </state>
  <state state_id="created" title="Created">
@@ -41,6 +46,7 @@
   </permission-map>
  </state>
  <state state_id="pending" title="Pending">
+  <exit-transition transition_id="abort"/>
   <exit-transition transition_id="approve"/>
   <exit-transition transition_id="reject"/>
  </state>
@@ -49,8 +55,15 @@
   <exit-transition transition_id="retract"/>
  </state>
  <state state_id="supporter" title="Supporter">
+  <exit-transition transition_id="abort"/>
   <exit-transition transition_id="retract"/>
  </state>
+ <transition transition_id="abort" title="Aborts relation" new_state="aborted" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=abort" category="workflow" icon="">Abort</action>
+  <guard>
+   <guard-permission>Request review</guard-permission>
+  </guard>
+ </transition>
  <transition transition_id="approve" title="Approves relation" new_state="approved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=approve" category="workflow" icon="">Approve</action>
   <guard>

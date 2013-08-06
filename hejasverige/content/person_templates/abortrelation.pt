@@ -1,0 +1,9 @@
+<h1 class="documentFirstHeading">Avregistrera från <span tal:replace="view/title" /></h1>
+<div class="documentDescription">Vill du avregistrera <span tal:replace="view/remove_from" /> från <span tal:replace="view/title" />?</div>
+<form action="#" method="post" name="form" tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+  <div class="formControls">
+    <input class="context" type="submit" name="form.button.Cancel" value="Avbryt" />
+    <input class="context" type="submit" name="form.button.Ok" value="Ok" />
+  </div>
+</form>
+

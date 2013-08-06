@@ -36,6 +36,19 @@
 
       });
     });
+
+    <!-- - Ta bort förening - -->
+    $(function(){
+      $('a#abort-relation').prepOverlay({
+        subtype: 'ajax',
+        formselector: 'form',
+        closeselector: '[name="form.button.Cancel"]',
+        noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
+        redirect: function () {return location.href;},    
+        width:'30%'
+
+      });
+    });
     </script>
 
         <figure class="familj">
@@ -56,11 +69,12 @@
                 <h3 class="" i18n:translate="title_clubs">Medlem i</h3>
 
                 <ul>
-                    <tal:block repeat="relation view/members">
+                    <tal:block repeat="membership view/members">
                         <li>
                             <!--span tal:define="state relation/review_state" tal:condition="python:state != 'pending'">*</span-->
-                            <a tal:attributes="href relation/absolute_url"
-                               tal:content="relation/title" />
+                            <a tal:attributes="href membership/clubobj/absolute_url"
+                               tal:content="membership/clubobj/title" />
+                             (<a class="gray" id="abort-relation" href="#" tal:attributes="href string:${membership/relation/getURL}/abort">Ta bort</a>)
                         </li>
                     </tal:block>
                 </ul>

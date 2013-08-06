@@ -44,6 +44,20 @@
             width:'50%'
           });
         });
+
+        <!-- - Ta bort förening - -->
+        $(function(){
+          $('a#abort-relation').prepOverlay({
+            subtype: 'ajax',
+            formselector: 'form',
+            closeselector: '[name="form.button.Cancel"]',
+            noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
+            redirect: function () {return location.href;},    
+            width:'30%'
+
+          });
+        });
+
         </script>
 
         <a id="add-club" class="button" tal:attributes="href string:${context/absolute_url}/@@add-relation">Lägg till förening</a>
@@ -73,7 +87,8 @@
 		                            	Medlem (<span tal:replace="club/status"/>): <span tal:replace="club/parentobj/first_name" /> <span tal:replace="club/parentobj/last_name" /> (<span tal:replace="club/parentobj/personal_id" />)
 		                            </tal:ifblock>
 		                            <tal:elseblock tal:condition="not:portal_type">
-		                            	Medlem (<span tal:replace="club/status"/>): Jag själv
+		                            	Medlem (<span tal:replace="club/status"/>): Jag själv 
+                                  (<a class="gray" id="abort-relation" href="#" tal:attributes="href string:${club/relation/getURL}/abort">Ta bort</a>)
 		                            </tal:elseblock>
 	                        	</tal:block>
 	                            <!--span tal:replace="relative/person/personal_id"/><br />
