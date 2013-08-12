@@ -3,7 +3,7 @@
         <indexed_attr value="corporateId"/>
     </index>
     <index name="supplierId" meta_type="FieldIndex">
-        <indexed_attr value="customerId"/>
+        <indexed_attr value="supplierId"/>
     </index>
     <index name="customerId" meta_type="FieldIndex">
         <indexed_attr value="customerId"/>
@@ -36,4 +36,5 @@
     <column value="Sport"/>
     <column value="personal_id"/>
     <column value="transaction_description"/>
+    <column value="transaction_fee"/>
 </object>

@@ -28,9 +28,15 @@
         </div>
 
         <div>
+            <label for="transaction_fee" i18n:translate="label_transaction_fee">Transaction Fee:</label>
+            <span id="transaction_fee" tal:content="context/transaction_fee" />
+        </div>
+
+        <div>
             <label for="transaction_description" i18n:translate="label_transaction_description">Transaction Description:</label>
             <span id="transaction_description" tal:content="context/transaction_description" />
         </div>
+
 
         <tal:stores condition="view/haveStores">
             <h2 i18n:translate="title_merchant_subareas">Stores</h2>

@@ -79,7 +79,7 @@
 	                            tal:attributes="src thumbnail/url;
 	                                            width thumbnail/width;
 	                                            height thumbnail/height" /-->
-
+                          
 	                        <figcaption>
 	                            <a id="view-club" tal:attributes="href club/clubobj/absolute_url" href="#"><span tal:replace="club/clubobj/Title"/></a><br />
 	                            <tal:block tal:define="portal_type python:club.get('portal_type')=='hejasverige.person'">

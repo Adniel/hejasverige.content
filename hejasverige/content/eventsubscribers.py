@@ -39,15 +39,9 @@ def _getFolder(userid, id, type_name):
             logger.info('Could not create member area: %s' % str(e))
 
         homefolder = mship.getHomeFolder(userid)
-        print 'Homefolder = %s' % str(homefolder)
+        logger.info('Homefolder = %s' % str(homefolder))
 
     if not id in homefolder.objectIds():
-        #import pdb; pdb.set_trace()
-
-        #user = self._getOwner(homefolder)
-        #if not user:
-        #    return None
-        #newSecurityManager(context.REQUEST, user)
         typestool.constructContent(type_name=type_name,
                                    container=homefolder, id=id)
         folder = homefolder[id]

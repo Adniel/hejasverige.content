@@ -32,6 +32,18 @@ def discountIsValid(value):
             raise Invalid(_(u'The discount must be numeric'))
     return True
 
+def transaction_feeIsValid(value):
+    """
+    """
+    if(value):
+        try:
+            value = float(value)
+            if value<0:
+                raise Invalid(_(u'Transaction fee to small. Fee must be less than greater than 0.'))
+        except:
+            raise Invalid(_(u'The transaction_fee must be numeric'))
+    return True
+
 class IMerchant(form.Schema):
 
     """A Merchant
@@ -54,12 +66,18 @@ class IMerchant(form.Schema):
                                 required=False,
                                 constraint=discountIsValid)
 
+    transaction_fee = schema.ASCIILine(title=_(u'Transaction Fee'), 
+                                description=_(u'The merchant´s agreed transaction fee'),
+                                required=False,
+                                constraint=transaction_feeIsValid)
+
     dexterity.read_permission(transaction_description='cmf.AddPortalContent') 
     dexterity.write_permission(transaction_description='cmf.ManagePortal') 
     transaction_description = schema.List(value_type=schema.TextLine(),
                                           title=_(u'Transaction Description'), 
                                           description=_(u'Regular expressions used to evaulate transaction descriptions from external systems. One expression per line.'),
                                           required=False)
+
 
 class View(grok.View):
 
