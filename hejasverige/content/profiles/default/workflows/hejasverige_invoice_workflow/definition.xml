@@ -99,7 +99,7 @@
  <transition transition_id="fail" title="Fails item" new_state="failed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=fail" category="workflow" icon="">Fail</action>
   <guard>
-   <guard-permission>Review portal content</guard-permission>
+   <guard-permission>HejaSverige: API View</guard-permission>
   </guard>
  </transition>
  <transition transition_id="retract" title="Retracts item" new_state="created" trigger="USER" before_script="" after_script="">
@@ -113,7 +113,7 @@
   <description>Transfers item to bank</description>
   <action url="%(content_url)s/content_status_modify?workflow_action=transfer" category="workflow" icon="">Transfer item</action>
   <guard>
-   <guard-permission>Review portal content</guard-permission>
+   <guard-permission>HejaSverige: API View</guard-permission>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">

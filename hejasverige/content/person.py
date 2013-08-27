@@ -430,6 +430,9 @@ class ShowAddRelationForm(grok.View):
             self.add_relation(self.add_club, member_type=member_type)
             self.redirect(self.url('my-person'))
 
+        # check if form submitted and return correct view
+        
+
         self.request.set('disable_border', True)
         self.selectedDistrict = self.request.form.get('district') or None
         self.selectedDistrictPath = None
