@@ -54,6 +54,14 @@
       permission="cmf.SetOwnProperties"
       />
 
+  <!--browser:page
+      for="Products.CMFPlone.Portal.PloneSite"
+      name="register"
+      class=".personalpreferencesoverride.CustomizedBaseRegistrationForm"
+      permission="cmf.SetOwnProperties"
+      /-->
+
+
   <plone:behavior
       title="Name from full name"
       description="Use the full name as name (and id)"

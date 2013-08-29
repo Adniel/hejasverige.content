@@ -2,6 +2,10 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="hejasverige.content">
 
+    <!--
+    	Overriding register
+		http://plone.293351.n2.nabble.com/subclassing-Plone-4-s-registration-form-overriding-super-class-s-decorated-method-td4213031.html    	 
+    -->
   <adapter
     provides=".userdataschema.IEnhancedUserDataSchema"
     for="Products.CMFCore.interfaces.ISiteRoot"

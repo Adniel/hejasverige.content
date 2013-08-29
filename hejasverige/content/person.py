@@ -224,7 +224,7 @@ class IPerson(form.Schema):
     #    )
 
     personal_id = schema.ASCIILine(
-        title=_(u"Personnummer"),
+        title=_(u"Personnummer (ÅÅMMDDNNNN)"),
         required=True,
         constraint=validatePersonalId,
         )

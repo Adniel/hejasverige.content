@@ -21,6 +21,4 @@
 	<object name="hejasverige.relation"		     meta_type="Dexterity FTI" />
 	<object name="hejasverige.relationfolder"    meta_type="Dexterity FTI" />
 
-	<object name="hejasverige.invitation"        meta_type="Dexterity FTI" />
-	<object name="hejasverige.invitationfolder"  meta_type="Dexterity FTI" />
 </object>
