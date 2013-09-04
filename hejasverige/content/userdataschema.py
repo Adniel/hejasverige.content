@@ -131,7 +131,7 @@ class IEnhancedUserDataSchema(IUserDataSchema):
     accept = schema.Bool(
         title=_(u'label_accept', default=u'Acceptera användarvillkor'),
         description=_(u'help_accept',
-                      default=u"De finns <a id='commonterms' href='dokument/avtal-och-villkor/avtalsvillkor-medlem/allmanna-villkor'>här</a>"), 
+                      default=u"De finns <a id='commonterms' href='dokument/avtal-och-villkor/avtalsvillkor-medlem/allmanna/allmana-villkor-medlem'>här</a>"), 
         required=True,
         constraint=validateAccept,
         )
