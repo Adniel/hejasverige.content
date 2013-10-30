@@ -32,6 +32,7 @@ def _getFolder(userid, id, type_name):
     current_auth = mship.getAuthenticatedMember()
     homefolder = mship.getHomeFolder(userid)
     logger.info('Found home folder %s' % str(homefolder))
+    #import pdb; pdb.set_trace()
     if homefolder is None:
         try:
             mship.createMemberarea(userid)

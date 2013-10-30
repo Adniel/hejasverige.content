@@ -23,10 +23,11 @@ class ReindexBrain(grok.View):
             result.append("with UID " + query_dict['UID'] + "</h1>")
 
         brains = catalog(query_dict)
-        #import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         for brain in brains:
             try:
                 res = brain.getObject().reindexObject()
+                result.append("<p>RID: " + str(brain.getRID()) + "</p>")
                 result.append(str(brain) + " reindexed")
             except Exception, ex:
                 result.append("Exception " + str(ex) + " occured when reindexing " + str(brain))

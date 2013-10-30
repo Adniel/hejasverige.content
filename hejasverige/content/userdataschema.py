@@ -9,6 +9,7 @@ from zope.interface import Invalid
 from hejasverige.content import _
 from zope.schema import ValidationError
 from Products.CMFCore.utils import getToolByName
+from zope.component import getMultiAdapter
 
 from zope.component import getUtility
 from Products.CMFCore.interfaces import ISiteRoot
@@ -73,6 +74,23 @@ def validatePersonalId(value):
             raise PersonalIdAlreadyRegistered(value)
     return True
 
+def getCommonTerms():
+    #import pdb; pdb.set_trace()
+    #context_state = getMultiAdapter((context.context, context.request),
+    #                                name=u'plone_context_state')
+
+    #commonterms_actions = None
+
+    #try: # Plone 4+
+    #    commonterms_actions = context_state.actions(category="hejasverige.commonterms")
+    #except TypeError: # Plone 3
+    #    commonterms_actions = context_state.actions().get('hejasverige.commonterms', ())    
+
+    #if not commonterms_actions:
+    commonterms_actions = 'dokument/avtal-och-villkor/avtalsvillkor-medlem/allmanna/allmana-villkor-medlem'
+
+    return commonterms_actions
+
 class UserDataSchemaProvider(object):
     implements(IUserDataSchemaProvider)
 
@@ -131,7 +149,7 @@ class IEnhancedUserDataSchema(IUserDataSchema):
     accept = schema.Bool(
         title=_(u'label_accept', default=u'Acceptera användarvillkor'),
         description=_(u'help_accept',
-                      default=u"De finns <a id='commonterms' target='_blank' href='dokument/avtal-och-villkor/avtalsvillkor-medlem/allmanna/allmana-villkor-medlem'>här</a>"), 
+                      default=u"De finns <a id='commonterms' target='_blank' href='" + getCommonTerms() + "'>h&auml;r!</a>"), 
         required=True,
         constraint=validateAccept,
         )

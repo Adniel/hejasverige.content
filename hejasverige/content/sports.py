@@ -270,16 +270,16 @@ class IClub(form.Schema, IImageScaleTraversable):
 
 
 #@grok.adapter(IClub, name='externalId')
-@indexer(IClub)
-def clubExternalIdIndexer(context):
-    """Create a catalogue indexer, registered as an adapter, which can
-    populate the ``externalId`` index with the related VatNo of the club.
-    """
-    externalId = context.VatNo
-    print "Indexing", externalId, "as external id for Club with id ", context.UID, "."
-    #import pdb; pdb.set_trace()
-    return externalId
-grok.global_adapter(clubExternalIdIndexer, name="externalId")
+#@indexer(IClub)
+#def clubExternalIdIndexer(context):
+#    """Create a catalogue indexer, registered as an adapter, which can
+#    populate the ``externalId`` index with the related VatNo of the club.
+#    """
+#    externalId = context.VatNo
+#    print "Indexing", externalId, "as external id for Club with id ", context.UID, "."
+#    #import pdb; pdb.set_trace()
+#    return externalId
+#grok.global_adapter(clubExternalIdIndexer, name="externalId")
 
 class ClubView(grok.View):
 

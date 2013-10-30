@@ -255,45 +255,6 @@ class IRelation(form.Schema):
         )
 
 
-# Indexersers does not work. They do for some reason not index content correct,
-# fix, fix, fix.
-# when it work, change object retreiavel in my-person view
-#@grok.adapter(IRelation, name='Title')
-@indexer(IRelation)
-def relationTitleIndexer(context):
-    """Create a catalogue indexer, registered as an adapter, which can
-    populate the ``title`` index with the related name of the club.
-    """
-    print "Indexing title for a relation. J!"
-    #import pdb; pdb.set_trace()
-    return uuidToObject(context.foreign_id).Title
-grok.global_adapter(relationTitleIndexer, name="Title")
-
-
-@grok.adapter(IRelation, name='externalId')
-@indexer(IRelation)
-def relationExternalIdIndexer(context):
-    """Create a catalogue indexer, registered as an adapter, which can
-    populate the ``externalId`` index with the related uid of the club.
-    """
-    externalId = uuidToObject(context.UID).UID
-    print "Indexing", externalId, "as external id for a relation with id", context.UID, "."
-    #import pdb; pdb.set_trace()
-    return externalId
-#grok.global_adapter(relationExternalIdIndexer, name="externalId")
-
-@indexer(IRelation)
-def relationSportIndexer(context):
-    """Create a catalogue indexer, registered as an adapter, which can
-    populate the ``Sport`` index with the related uid of the club.
-    """
-    sport = uuidToObject(context.UID).Sport
-    print "Indexing", sport, "as external id for a relation with id", context.UID, "."
-    #import pdb; pdb.set_trace()
-    return sport
-grok.global_adapter(relationSportIndexer, name="Sport")
-
-
 # Dexterity behaviour to get the object name (title) from fullname
 from plone.app.content.interfaces import INameFromTitle
 from zope.component import adapts
@@ -365,8 +326,6 @@ class ShowAddRelationForm(grok.View):
         relobj = createContent(portal_type='hejasverige.relation',
                                  foreign_id=id,
                                 )
-
-        #import pdb; pdb.set_trace()
 
         try:
             item = addContentToContainer(container=self.__parent__, object=relobj, checkConstraints=False)
@@ -863,13 +822,11 @@ class MyClubs(grok.View):
     grok.require('zope2.View')
     grok.name('my-clubs')
     grok.implements(IMyPages)
-    #grok.template('myfamily')
 
     @memoize
     def clubs(self, start=0, size=11):
         """Get all clubs related to a person.
         """
-        #import pdb; pdb.set_trace()
         mship = getToolByName(self.context, 'portal_membership')
 
         home = mship.getHomeFolder()
@@ -891,7 +848,6 @@ class MyClubs(grok.View):
         clubs = [x for x in clubs if x['clubobj']]
         # for j in [i for i in dir(clubs[0].get('relation').getObject().aq_inner.aq_parent) if i.startswith('p')]: print j
         # clubs[0].get('relation').getObject().aq_inner.aq_parent.portal_type = 'hejasverige.person'
-#        import pdb; pdb.set_trace()
         return clubs
 
     def update(self):
@@ -920,5 +876,3 @@ class MyClubs(grok.View):
                 'sort_on': 'sortable_title'})]
 
         
-#        import pdb; pdb.set_trace()
-    #    return "This is my clubs"

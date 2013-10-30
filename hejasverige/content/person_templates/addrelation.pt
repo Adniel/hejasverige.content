@@ -110,8 +110,9 @@
                 <tbody>
                     <tr tal:repeat="item batch">
                       <td>
-                          <a id="clubinfo" tal:attributes="href item/url"
-                              tal:content="item/title" />
+                          <!--a id="clubinfo" tal:attributes="href item/url"
+                              tal:content="item/title" /-->
+                          <span tal:replace="item/title" />
 
                       </td>
                       <td tal:content="item/sport" />
