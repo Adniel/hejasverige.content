@@ -74,4 +74,8 @@
         title="HejaSverige: Add Relation Folder"
         />
 
+    <permission
+        id="hejasverige.InviteMembers"
+        title="HejaSverige: Invite Members"
+        />
 </configure>
