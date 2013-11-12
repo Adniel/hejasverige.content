@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 import re
 import logging
@@ -467,6 +467,8 @@ class AddRelation(grok.View):
         #alsoProvides(self, IMyPages)
         #return_view should be either my-person or add-club
         self.add_club = self.request.form.get('add-club') or None
+        self.wizard = self.request.form.get('wizard') or None
+        
         if self.add_club:
             self.return_view = self.request.form.get('return_view') or 'add-club'
             member_type = self.request.form.get('type') or 'supporter'
@@ -475,10 +477,15 @@ class AddRelation(grok.View):
             self.add_relation(self.add_club, member_type=member_type)
 
             #self.redirect(self.url('my-person'))
-            self.redirect(self.url(self.return_view))
-        else:
             #import pdb; pdb.set_trace()
-            if self._BrowserView__getParent().Type() == 'Person':
+            if self.wizard == 'true':
+                self.redirect(self.return_view)
+            else:
+                self.redirect(self.url(self.return_view))
+        else:
+            if self.wizard == 'true':
+                self.return_view = self.request.get('wizard_url')
+            elif self._BrowserView__getParent().Type() == 'Person':
                 self.return_view = 'my-person'
             else:
                 self.return_view = 'my-clubs'

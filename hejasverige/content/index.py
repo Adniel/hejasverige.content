@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from five import grok
 from hejasverige.content.sports import IClub
 from hejasverige.content.person import IRelation
@@ -16,6 +18,9 @@ def clubPersonalIdIndexer(context):
         vat_no = vat_no.replace('-', '')
         print "Indexing", vat_no, "as personal_id for Club with id ", context.UID(), "."
         #import pdb; pdb.set_trace()
+
+        # TODO: Reindex also relations.
+        # Vat_no används i api för att filtrera bort föreningar.
         return vat_no
     except Exception:
         #import pdb; pdb.set_trace()

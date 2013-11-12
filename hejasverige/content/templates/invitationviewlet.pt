@@ -1,0 +1,21 @@
+<div>
+    <script type="text/javascript">
+    $(function(){
+      $('a#invite_member').prepOverlay({
+        subtype: 'ajax',
+        formselector: 'form',
+        filter: '#content',
+        closeselector: '[name="form.button.Cancel"]',
+        noform: function(el) {return $.plonepopups.noformerrorshow(el, 'redirect');},
+        redirect: function () {return location.href;},    
+        width:'30%'
+
+      });
+    });
+    </script>
+
+	<ul class="visualInline">
+		<li><a id="invite_member" href="./@@invite-member">Invite one</a></li>
+		<li><a id="invite_member" href="./@@invite-members">Invite many</a></li>
+	</ul>
+</div>
